@@ -1,7 +1,16 @@
 import json
+from collections import OrderedDict
+from thefuzz import fuzz
+from thefuzz import process
+
+# SEARCH_FRACTION Defines a "reasonable" number of search results for each query as a fraction of the
+# total number of books in the catalog.
+SEARCH_FRACTION = 0.1
+
 
 class TitleNotFoundException(Exception):
     pass
+
 
 """
 Reads mortimer.json and outputs a dictionary
@@ -75,16 +84,48 @@ def request_state():
             return int(user_input)
 
 """
-Searches the booklist and returns the index of the book with the specified title
+Params:
+- Search query is the title of the book to find.
+- Book list is the list of books (not just titles!) to search through to find the target title.
+First tries to exactly match the title of the book with the input title. If there is no such match, returns the index of a first match of a fuzzy search.
+Fuzzy searches the booklist and returns the index of the book with the specified title
+Returns -1 if something bad happens (probably an invalid title, but I haven't tested this.)
 """
-# TODO: Change this to match by ID instead of title
-def search_booklist(title: str, book_list: list):
+def fuzzy_search_booklist(search_query: str, book_list: list):
     for bookIndex, book in enumerate(book_list):
         try:
-            if book["title"]  == title:
+            if book["title"]  == search_query:
                 return bookIndex
         except:
-            raise KeyError("There's been an error. Is your list in the right format?")
+            print("Oops! Something went wrong in fuzzy_search_booklist!")
+            return -1
 
-    # There aren't any books of that title in the list
-    raise TitleNotFoundException
+
+    # Commence fuzzy search.
+
+    # Create an ordered list of book titles by greatest-to-least Levenshtein distance
+    # from the given query.
+    title_catalog = [book["title"] for book in book_list]
+    title_to_levenshtein = {title: fuzz.ratio(search_query, title) for title in title_catalog}
+    sorted_title_to_catalog = {k: v for k, v in sorted(title_to_levenshtein.items(), key=lambda item: item[1])}
+    results = OrderedDict(reversed(list(sorted_title_to_catalog.items())))
+
+    # Extract the top match
+    results_list = list(results.items())
+    result_title = results_list[0][0]
+
+    # Find the index of the book with that matching title.
+    for bookIndex, book in enumerate(book_list):
+        try:
+            if book["title"]  == result_title:
+                return bookIndex
+        except:
+            print("Oops! Something went wrong in fuzzy_search_booklist!")
+            return -1
+
+    # The list is empty
+    print("Your list is empty!")
+
+
+# TODO: Add a function that matches by ID instead of title
+

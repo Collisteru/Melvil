@@ -46,7 +46,7 @@ def add():
     tags = []
     for i in range(tag_num):
         tags.append(input(f"Tag #{i + 1}? "))
-    state_response = h.request_status()
+    state_response = h.request_state()
 
     state = state_response
     priority_response = -1
@@ -106,13 +106,19 @@ def remove():
 Prints the contents of the list in order of greatest-to-least priority.
 """
 @app.command()
-def flip():
+def flip(helper: bool=False):
     raw_json = h.read_file()
 
     book_list = raw_json["book_list"]
     new_list = sorted(book_list, key=lambda d: d['priority'])
-    for book in new_list:
-        print(book["title"])
+
+    # Sometimes, we want to use this function internally to get a title catalog.
+    # In these cases, we don't want to print the list to the user.
+    if not helper:
+        for book in new_list:
+            print(book["title"])
+
+    return new_list # Can we use this as a helper for other commands?
 
 """
 Changes the status of target book to target status.
@@ -124,7 +130,7 @@ def advance():
     target_book = input("Which book would you like to change? ")
     raw_json = h.read_file()
     try:
-        book_index = h.search_booklist(target_book, raw_json["book_list"])
+        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
@@ -152,7 +158,7 @@ def skim():
     raw_json = h.read_file()
 
     try:
-        book_index = h.search_booklist(target_book, raw_json["book_list"])
+        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
@@ -175,7 +181,7 @@ def prioritize():
     target_book = input("Which book would you like to change? ")
     raw_json = h.read_file()
     try:
-        book_index = h.search_booklist(target_book, raw_json["book_list"])
+        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
@@ -188,7 +194,7 @@ def prioritize():
     book["priority"] = target_priority
 
     h.write_file(raw_json)
-    print(f"Changed the priority of {target_book} to {target_priority}")
+
     return
 
 """
@@ -199,7 +205,7 @@ def tag():
     target_book = input("Which book would you like to tag? ")
     raw_json = h.read_file()
     try:
-        book_index = h.search_booklist(target_book, raw_json["book_list"])
+        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
@@ -220,7 +226,7 @@ def untag():
     target_book_input = input("Which book would you like to remove a tag from? ")
     raw_json = h.read_file()
     try:
-        book_index = h.search_booklist(target_book_input, raw_json["book_list"])
+        book_index = h.fuzzy_search_booklist(target_book_input, raw_json["book_list"])
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
@@ -240,7 +246,25 @@ def untag():
             return
     print(f"{target_tag} isn't a tag of {target_book['title']}")
 
+"""
+Search by title: Fuzzy search returns all the book titles that roughly match your target by sifting the results of flip.
+"""
+@app.command()
+def lookup():
+    search_query = input("What title would you like to look up? ")
 
+    raw_json = h.read_file()
+    book_catalog = raw_json["book_list"]
+    title_catalog = [book["title"] for book in book_catalog]
+    # TODO: Use fuzzy_search for this.
+
+    num_results = max(1, round(h.SEARCH_FRACTION*len(book_catalog)))
+    print(f"These are the {num_results} titles that most closely match your query: ")
+    for result in range(num_results):
+        top_result_index = int(h.fuzzy_search_booklist(search_query, book_catalog))
+        top_result = title_catalog[top_result_index]
+        print(top_result)
+        book_catalog.pop(top_result_index)
 
 if __name__ == "__main__":
       app()

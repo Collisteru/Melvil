@@ -1,0 +1,41 @@
+{
+    "lastEdited": "2022-08-11",
+    "book_list": [
+        {
+            "title": "Bible",
+            "author": "Various",
+            "tags": [
+                "good"
+            ],
+            "state": "Reading",
+            "priority": 50
+        },
+        {
+            "title": "Second",
+            "author": "Who Knows?\\",
+            "tags": null,
+            "state": "TO_READ",
+            "priority": 10
+        },
+        {
+            "title": "Fractional",
+            "author": "Edwin A. Abbott, Probably",
+            "tags": [
+                "romance",
+                "many dimensions",
+                "math"
+            ],
+            "state": "To Read",
+            "priority": 23
+        },
+        {
+            "title": "Fourth",
+            "author": "Henry IV",
+            "tags": [
+                "kingly"
+            ],
+            "state": "Reviewed",
+            "priority": 10.5
+        }
+    ]
+}

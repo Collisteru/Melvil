@@ -162,6 +162,50 @@
             ],
             "state": "Reviewed",
             "priority": 10.5
+        },
+        {
+            "title": "My Work and Life",
+            "author": "Henry Ford",
+            "tags": [
+                "biography",
+                "work",
+                "self-help"
+            ],
+            "state": 1,
+            "priority": 30
+        },
+        {
+            "title": "The Seven Habits of Highly Effective People",
+            "author": "Alfred Adler?",
+            "tags": [
+                "self-help",
+                "kingly",
+                "good"
+            ],
+            "state": 3,
+            "priority": 35
+        },
+        {
+            "title": "Quantum Mechanics: The Theorcal Minimum",
+            "author": "Leonard Susskind",
+            "tags": [
+                "physics",
+                "math",
+                "good"
+            ],
+            "state": 2,
+            "priority": 46
         }
+    ],
+    "tag_list": [
+        "biography",
+        "kingly",
+        "good",
+        "physics",
+        "self-help",
+        "many dimensions",
+        "math",
+        "romance",
+        "work"
     ]
 }

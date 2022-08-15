@@ -2,6 +2,7 @@ import json
 from collections import OrderedDict
 from thefuzz import fuzz
 from thefuzz import process
+import inquirer
 
 # SEARCH_FRACTION Defines a "reasonable" number of search results for each query as a fraction of the
 # total number of books in the catalog.
@@ -127,5 +128,21 @@ def fuzzy_search_booklist(search_query: str, book_list: list):
     print("Your list is empty!")
 
 
+# We just need a func that can accept integers or floats
+def verify_priority(answers, current):
+    try:
+        float(current)
+    except:
+        raise inquirer.errors.ValidationError('', reason='Please enter a floating-point or integer number.')
+    return True
+
+
+# Tries to convert the answer into an int and returns True if successful. Otherwise, raises an error.
+def force_int(answers, current):
+    try:
+        int(current)
+    except:
+        raise inquirer.errors.ValidationError('', reason='Please enter an integer.')
+    return True
 # TODO: Add a function that matches by ID instead of title
 

@@ -4,9 +4,6 @@ import typer
 from datetime import date
 import json
 import helper as h
-import sys
-import re
-from pprint import pprint
 import inquirer
 
 
@@ -56,37 +53,52 @@ def init():
         print(f"New JSON file initialized at {location}")
         file.write(json_string)
 
+# TODO: Check for and eliminate duplicates
+# Change this to add flags based on what information the user wants to add. The title is required
 @app.command()
 def add():
     # Capture info about the new book
     path = os.getcwd()
 
-    
+    # Capture book information
+    questions = [
+        inquirer.Text('title',
+                      message="What is the title of the book you want to add?",
+                      ),
+        inquirer.Text('book_author',
+                      message="What is the author?",
+                      ),
+        inquirer.List('state',
+                      message = "What state is the book in?",
+                      choices = STATES,
+                      ),
+        inquirer.Text('priority',
+                      message="What is the priority of the book?",
+                      validate=h.verify_priority,
+                      ),
+        inquirer.Text('tag_num',
+                      message="How many tags to add?",
+                      validate=h.force_int,
+                      )
+    ]
+    answers = inquirer.prompt(questions)
 
-    title = input("What is the title? ")
-    book_author = input("What is the author? ")
-    tag_num = h.check_user_input("How many tags to add? ", 1)
-    tags = []
-    for i in range(tag_num):
-        tags.append(input(f"Tag #{i + 1}? "))
-    state_response = h.request_state()
+    tag_questions = []
 
-    state = state_response
-    priority_response = -1
-    priority_response = h.check_user_input("Please input a priority between 0 and 100. ", 1)
-    while priority_response not in range(0, 101):
-        # TODO: Use inquirer for this.
-        priority_response = h.check_user_input("Please input a priority between 0 and 100. ", 1)
-    priority = priority_response
+    # We know it's safe to convert the tag_num answer into an integer because force_int passed verification.
+    for i in range(int(answers["tag_num"])):
+        tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
+
+    tag_answers = inquirer.prompt(tag_questions)
 
     # Create dictionary of book with all this information, convert it to JSON load the JSON
     # of the file holding the books, append this JSON to the other JSON, and dump it all back into the file.
     book = {}
-    book["title"] = title
-    book["author"] = book_author
-    book["tags"] = tags
-    book["state"] = state
-    book["priority"] = priority
+    book["title"] = answers["title"]
+    book["author"] = answers["book_author"]
+    book["tags"] = [key for key in tag_answers.keys()]
+    book["state"] = answers["state"]
+    book["priority"] = answers["priority"]
 
     # Read mortimer.json to get what's already there.
     old_data = h.read_file()
@@ -101,13 +113,22 @@ def add():
     # Write old_data to file
     h.write_file(old_data)
 
+    # Notify user
+    print(f"{book['title']} by {book['author']} added to the list.")
+
 """
 Searches the database for a book with this title. Deletes the book with that title or, if there
 are no such books, lets the user know this.
 """
 @app.command()
 def remove():
-    input_title = input("Input the title of the book to remove. ")
+    question = [
+        inquirer.Text('title',
+                      message="What is the title of the book you want to remove?",
+                      ),
+    ]
+    answers = inquirer.prompt(question)
+    input_title = answers["title"]
     raw_json = h.read_file()
 
     # raw_json is a dictionary, raw_json["book_list"] is a list of dictionaries
@@ -139,18 +160,30 @@ def flip(helper: bool=False):
     # In these cases, we don't want to print the list to the user.
     if not helper:
         for book in new_list:
-            print(book["title"])
+            print(book["title"] + " by " + book["author"])
 
     return new_list # Can we use this as a helper for other commands?
 
 """
 Changes the status of target book to target status.
+Ugh, this is going to be a nightmare to test.
 """
 @app.command()
 def advance():
+    question = [
+        inquirer.Text('title',
+                      message="What is the title of the book you want to change the status of?",
+                      ),
+        inquirer.List('state',
+                      message="Change to which target state?",
+                      choices=STATES,
+                      ),
+    ]
+    answers = inquirer.prompt(question)
+    target_book = answers["title"]
+    target_state = answers["state"]
 
     # Get the index of the target book
-    target_book = input("Which book would you like to change? ")
     raw_json = h.read_file()
     try:
         book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
@@ -158,18 +191,15 @@ def advance():
         print("There are no books with that title in your list.")
         return
 
-    # Get the target state
-    target_state_index = h.request_state()
-
     # Change the state of the target title to the target state
     book = raw_json["book_list"][book_index]
-    book["state"] = STATES[target_state_index]
+    book["state"] = target_state
     raw_json["book_list"][book_index] = book
-    assert(type(raw_json) == dict) # Typecheck
-
+    assert(type(raw_json) == dict)
 
     h.write_file(raw_json)
-    print(f"Changed the status of {target_book} to {STATES[target_state_index]}")
+    print(f"Changed the status of {book['title']} to {target_state}")
+
     return
 
 """
@@ -177,7 +207,13 @@ Lists all the attributes of the single input book.
 """
 @app.command()
 def skim():
-    target_book = input("Which book would you like to skim? ")
+    question = [
+        inquirer.Text('title',
+                      message="Which book would you like to skim?",
+                      ),
+    ]
+    answers = inquirer.prompt(question)
+    target_book = answers["title"]
     raw_json = h.read_file()
 
     try:
@@ -201,16 +237,25 @@ Changes the status of target book to target status.
 def prioritize():
 
     # Get the index of the target book
-    target_book = input("Which book would you like to change? ")
+    # TODO: Make a function for getting a title
+    question = [
+        inquirer.Text('title',
+                      message="Which book would you like to prioritize?",
+                      ),
+        inquirer.Text('priority',
+                      message="What priority to set this book to?",
+                      validate=h.verify_priority, )
+    ]
+    answers = inquirer.prompt(question)
+    target_book = answers["title"]
+    target_priority = answers["priority"]
+
     raw_json = h.read_file()
     try:
         book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
-
-    # Get the target priority
-    target_priority = h.check_user_input("What priority to switch to? ", 1)
 
     # Change the state of the target title to the target state
     book = raw_json["book_list"][book_index]
@@ -225,7 +270,18 @@ Adds the target tag to the target book.
 """
 @app.command()
 def tag():
-    target_book = input("Which book would you like to tag? ")
+    question = [
+        inquirer.Text('title',
+                      message="Which book would you like to tag?",
+                      ),
+        inquirer.Text('tag',
+                      message=f"What tag would you like to add to this book?",
+                      ),
+    ]
+    answers = inquirer.prompt(question)
+    target_book = answers["title"]
+    tag = answers["tag"]
+
     raw_json = h.read_file()
     try:
         book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
@@ -233,8 +289,6 @@ def tag():
         print("There are no books with that title in your list.")
         return
 
-    # Get the target tag
-    tag = input(f"What tag would you like to add to {target_book}? ")
     # Change the state of the target title to the target state
     book = raw_json["book_list"][book_index]
     book["tags"].append(tag)
@@ -246,7 +300,18 @@ Removes the target tag from the target book.
 """
 @app.command()
 def untag():
-    target_book_input = input("Which book would you like to remove a tag from? ")
+    question = [
+        inquirer.Text('title',
+                      message="Which book would you like to untag?",
+                      ),
+        inquirer.Text('tag',
+                      message="What tag would you like to remove from this book?",
+                        ),
+    ]
+    answers = inquirer.prompt(question)
+    target_book_input = answers["title"]
+    target_tag = answers["tag"]
+
     raw_json = h.read_file()
     try:
         book_index = h.fuzzy_search_booklist(target_book_input, raw_json["book_list"])
@@ -256,7 +321,6 @@ def untag():
 
     # Get the target tag
     target_book = raw_json["book_list"][book_index]
-    target_tag = input(f"What tag would you like to remove from {target_book_input}? ").strip()
     # Search list of tags for target tag
     for tag in target_book["tags"]:
         if tag.strip() == target_tag:
@@ -274,7 +338,13 @@ Search by title: Fuzzy search returns all the book titles that roughly match you
 """
 @app.command()
 def lookup():
-    search_query = input("What title would you like to look up? ")
+    question = [
+        inquirer.Text('title',
+                      message="Which book would you like to look up?",
+                      ),
+    ]
+    answers = inquirer.prompt(question)
+    search_query = answers["title"]
 
     raw_json = h.read_file()
     book_catalog = raw_json["book_list"]

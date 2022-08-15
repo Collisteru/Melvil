@@ -4,10 +4,13 @@ import typer
 from datetime import date
 import json
 import helper as h
+import sys
+import re
+from pprint import pprint
+import inquirer
 
 
-
-TODAY = date.today()
+TODAY = str(date.today())
 app = typer.Typer()
 
 VERSION = "0.3.0"
@@ -15,31 +18,51 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 STATES = ["To Read", "Reading", "Read", "Reviewed"]
 FILE_NAME = "mortimer.json"
 
+
 """
 Initialize JSON in location specified by user or, if none, the working directory.
 """
 @app.command()
-def init(location: Optional[str] = "./mortimer.json"):
-    global TODAY
-    try:
-        assert(location.endswith("json"))
-    except:
-        print("Incorrect file format. Please use a different file name and location.")
-        quit()
-    TODAY = str(TODAY)
+def init():
+    def file_validation(answers, current):
+        if current.endswith(".json") == False:
+            # We allow an empty answer; this just goes to the default location saved in the global variable FILE_NAME.
+            if(current == ""):
+                return True
+            print("Not a valid file name. Please use a .json file.")
+            raise inquirer.errors.ValidationError('', reason='Please use a .json file extension.')
+        return True
+
+    # Inquire as to the desired location
+    questions = [
+        inquirer.Text('file_name', message="Please enter the file you would like to designate as the storage file for your books.", validate=file_validation)
+    ]
+    answers = inquirer.prompt(questions)
+
+    # If no file name is provided, use the current working directory
+    if answers["file_name"] == "":
+        location = os.getcwd() + "/" + FILE_NAME
+    else:
+        # Else use the file name provided by the user. Either way, we initialize the file in the current working directory (TODO: we should refactor this to be more flexible).
+        location = os.getcwd() + "/" + answers["file_name"]
+
+    # Initialize book dictionary
     initDict = {}
     initDict['lastEdited'] = TODAY
     initDict['book_list'] = [] # An empty list indicates that no books have been added yet.
+    initDict["tag_list"] = []
     json_string = json.dumps(initDict, indent=4)
     with open(location, "w+") as file:
         print(f"New JSON file initialized at {location}")
         file.write(json_string)
-        print("Wrote lastEdited data.")
 
 @app.command()
 def add():
     # Capture info about the new book
     path = os.getcwd()
+
+    
+
     title = input("What is the title? ")
     book_author = input("What is the author? ")
     tag_num = h.check_user_input("How many tags to add? ", 1)

@@ -12,7 +12,7 @@ app = typer.Typer()
 
 VERSION = "0.3.0"
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
-STATES = ["To Read", "Reading", "Read", "Reviewed"]
+STATES = ["Unknown", "To Read", "Reading", "Read", "Reviewed"]
 FILE_NAME = "mortimer.json"
 
 
@@ -49,6 +49,7 @@ def init():
     initDict['book_list'] = [] # An empty list indicates that no books have been added yet.
     initDict["tag_list"] = []
     json_string = json.dumps(initDict, indent=4)
+    os.makedirs(os.path.dirname(location), exist_ok=True)
     with open(location, "w+") as file:
         print(f"New JSON file initialized at {location}")
         file.write(json_string)
@@ -58,49 +59,88 @@ def init():
 # Change this to add flags based on what information the user wants to add. The title is required
 # TODO: Change so that you only need to input the title unless you use flags to input more.
 @app.command()
-def add():
-    # Capture info about the new book
-    path = os.getcwd()
+def add(
+        author: bool = typer.Option(False, "--author", help="Specify the author of the book"),
+        state: bool = typer.Option(False, "--state", help="Specify what stage you are at in reading this book."),
+        priority: bool = typer.Option(False, "--priority", help="Specify the priority of this book relative to others (changes the ordering of the list)."),
+        tags: bool = typer.Option(False, "--tags", help="Specify whether you would like to add tags to this book now.")
+):
 
-    # Capture book information
-    questions = [
-        inquirer.Text('title',
-                      message="What is the title of the book you want to add?",
-                      ),
+    # Capture info about the new book
+    author_question = [
         inquirer.Text('book_author',
                       message="What is the author?",
-                      ),
+                      )
+    ]
+
+    state_question = [
         inquirer.List('state',
-                      message = "What state is the book in?",
-                      choices = STATES,
-                      ),
+                      message="What state is the book in?",
+                      choices=STATES,
+                      )
+    ]
+
+    priority_question = [
         inquirer.Text('priority',
                       message="What is the priority of the book?",
                       validate=h.verify_priority,
-                      ),
+                      )
+    ]
+
+    tag_number_question = [
         inquirer.Text('tag_num',
                       message="How many tags to add?",
                       validate=h.force_int,
                       )
     ]
-    answers = inquirer.prompt(questions)
 
-    tag_questions = []
-
-    # We know it's safe to convert the tag_num answer into an integer because force_int passed verification.
-    for i in range(int(answers["tag_num"])):
-        tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
-
-    tag_answers = inquirer.prompt(tag_questions)
-
-    # Create dictionary of book with all this information, convert it to JSON load the JSON
-    # of the file holding the books, append this JSON to the other JSON, and dump it all back into the file.
+    # Define the book as a dictionary, filling in its keys with values depending on what the user has decided
+    # to specify with flags.
     book = {}
-    book["title"] = answers["title"]
-    book["author"] = answers["book_author"]
-    book["tags"] = [key for key in tag_answers.keys()]
-    book["state"] = answers["state"]
-    book["priority"] = answers["priority"]
+
+    # Define title
+    title_question = [
+        inquirer.Text('title',
+                      message="What is the title of the book you want to add?",
+                      )
+    ]
+    title_answer = inquirer.prompt(title_question)
+
+    # Define author, conditional on flag
+    if author:
+        author_input = inquirer.prompt(author_question)
+        book["author"] = author_input["book_author"]
+    else:
+        book["author"] = ""
+
+
+    # Define state, conditional on flag
+    if state:
+        state_input = inquirer.prompt(state_question)
+        book["state"] = state_input["state"]
+    else:
+        book["state"] = "Unknown"
+
+
+    # Define priority, conditional on flag
+    if priority:
+        priority_input = inquirer.prompt(priority_question)
+        book["priority"] = priority_input["priority"]
+
+    if tags:
+        tag_number_input = inquirer.prompt(tag_number_question)
+        tag_questions = []
+
+        # We know it's safe to convert the tag_num answer into an integer because force_int passed verification.
+        for i in range(int(tag_number_input)):
+            tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
+
+        tag_answers = inquirer.prompt(tag_questions)
+        book["tags"] = [key for key in tag_answers.keys()]
+
+
+    # Convert the dictionary to JSON, load the JSON of the file holding the books, append this JSON to the other JSON,
+    # and dump it all back into the file.
 
     # Read mortimer.json to get what's already there.
     old_data = h.read_file()
@@ -113,8 +153,7 @@ def add():
     old_tag_set = set(old_data["tag_list"])
     new_tag_set = set(tags).union(old_tag_set)
 
-
-    # Update old_data
+    # Update JSON data with new booklist and taglist
     old_data["book_list"] = old_book_list
     old_data["tag_list"] = list(new_tag_set)
 
@@ -401,10 +440,6 @@ def compile():
     print(f"These are the books with the tag {target_tag}: ")
     for book in books_with_target_tag:
         print(book)
-
-
-
-
 
 
 if __name__ == "__main__":

@@ -53,8 +53,10 @@ def init():
         print(f"New JSON file initialized at {location}")
         file.write(json_string)
 
+
 # TODO: Check for and eliminate duplicates
 # Change this to add flags based on what information the user wants to add. The title is required
+# TODO: Change so that you only need to input the title unless you use flags to input more.
 @app.command()
 def add():
     # Capture info about the new book
@@ -107,8 +109,14 @@ def add():
     old_book_list = old_data["book_list"]
     old_book_list.append(book)
 
+    # Add new tags to the taglist
+    old_tag_set = set(old_data["tag_list"])
+    new_tag_set = set(tags).union(old_tag_set)
+
+
     # Update old_data
     old_data["book_list"] = old_book_list
+    old_data["tag_list"] = list(new_tag_set)
 
     # Write old_data to file
     h.write_file(old_data)
@@ -358,6 +366,46 @@ def lookup():
         top_result = title_catalog[top_result_index]
         print(top_result)
         book_catalog.pop(top_result_index)
+
+"""
+Search by tag functionality. 
+
+
+Figure out what tag the user wants in a robust way by creating an ordered lists of tags by greatest-to-least
+Levenshtein distance from the given query.
+
+We just fuzzy search the set based on the user's query and select the topmost tag. Then we iterate over the list of books that have that tag
+, and then we spit out all the titles that include such tags attached to them.
+"""
+@app.command()
+def compile():
+    search_query = input("Which tag would you like to search for? ")
+
+    raw_json = h.read_file()
+    book_catalog = raw_json["book_list"]
+
+    tag_catalog = raw_json["tag_list"]
+    tag_to_levenshtein = {tag: h.fuzz.ratio(search_query, tag) for tag in tag_catalog}
+    sorted_tag_to_catalog = {k: v for k, v in sorted(tag_to_levenshtein.items(), key=lambda item: item[1])}
+    target_tag = sorted_tag_to_catalog.popitem()[0]
+
+    books_with_target_tag = []
+    for book in book_catalog:
+        try:
+            if target_tag in book["tags"]:
+                books_with_target_tag.append(book["title"])
+        except:
+            # This book has no tags. Nothing to worry about.
+            continue
+
+    print(f"These are the books with the tag {target_tag}: ")
+    for book in books_with_target_tag:
+        print(book)
+
+
+
+
+
 
 if __name__ == "__main__":
       app()

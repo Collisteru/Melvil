@@ -5,6 +5,7 @@ from datetime import date
 import json
 import helper as h
 import inquirer
+from pprint import pprint
 
 
 TODAY = str(date.today())
@@ -60,10 +61,10 @@ def init():
 # TODO: Change so that you only need to input the title unless you use flags to input more.
 @app.command()
 def add(
-        author: bool = typer.Option(False, "--author", help="Specify the author of the book"),
-        state: bool = typer.Option(False, "--state", help="Specify what stage you are at in reading this book."),
-        priority: bool = typer.Option(False, "--priority", help="Specify the priority of this book relative to others (changes the ordering of the list)."),
-        tags: bool = typer.Option(False, "--tags", help="Specify whether you would like to add tags to this book now.")
+        author: bool = typer.Option(False, "--author", "-a", help="Specify the author of the book"),
+        state: bool = typer.Option(False, "--state", "-s", help="Specify what stage you are at in reading this book."),
+        priority: bool = typer.Option(False, "--priority", "-p", help="Specify the priority of this book relative to others (changes the ordering of the list)."),
+        tags: bool = typer.Option(False, "--tags", "-t", help="Specify whether you would like to add tags to this book now.")
 ):
 
     # Capture info about the new book
@@ -104,7 +105,9 @@ def add(
                       message="What is the title of the book you want to add?",
                       )
     ]
+
     title_answer = inquirer.prompt(title_question)
+    book['title'] = title_answer['title']
 
     # Define author, conditional on flag
     if author:
@@ -113,7 +116,6 @@ def add(
     else:
         book["author"] = ""
 
-
     # Define state, conditional on flag
     if state:
         state_input = inquirer.prompt(state_question)
@@ -121,22 +123,26 @@ def add(
     else:
         book["state"] = "Unknown"
 
-
     # Define priority, conditional on flag
     if priority:
         priority_input = inquirer.prompt(priority_question)
         book["priority"] = priority_input["priority"]
+    else:
+        book["priority"] = "0" # Default to zero priority
 
     if tags:
         tag_number_input = inquirer.prompt(tag_number_question)
         tag_questions = []
 
         # We know it's safe to convert the tag_num answer into an integer because force_int passed verification.
-        for i in range(int(tag_number_input)):
+        for i in range(int(tag_number_input["tag_num"])):
             tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
 
         tag_answers = inquirer.prompt(tag_questions)
-        book["tags"] = [key for key in tag_answers.keys()]
+        tags = [value for value in tag_answers.values()]
+        book["tags"] = tags
+    else:
+        tags = []
 
 
     # Convert the dictionary to JSON, load the JSON of the file holding the books, append this JSON to the other JSON,
@@ -151,6 +157,7 @@ def add(
 
     # Add new tags to the taglist
     old_tag_set = set(old_data["tag_list"])
+
     new_tag_set = set(tags).union(old_tag_set)
 
     # Update JSON data with new booklist and taglist
@@ -161,7 +168,10 @@ def add(
     h.write_file(old_data)
 
     # Notify user
-    print(f"{book['title']} by {book['author']} added to the list.")
+    if author:
+        print(f"{book['title']} by {book['author']} added to the list.")
+    else:
+        print(f"{book['title']} added to the list.")
 
 """
 Searches the database for a book with this title. Deletes the book with that title or, if there
@@ -201,13 +211,16 @@ def flip(helper: bool=False):
     raw_json = h.read_file()
 
     book_list = raw_json["book_list"]
-    new_list = sorted(book_list, key=lambda d: d['priority'])
+    new_list = sorted(book_list, key=lambda d: int(d['priority']), reverse=True)
 
     # Sometimes, we want to use this function internally to get a title catalog.
     # In these cases, we don't want to print the list to the user.
     if not helper:
         for book in new_list:
-            print(book["title"] + " by " + book["author"])
+            if book["author"]:
+                print(book["title"] + " by " + book["author"])
+            else:
+                print(book["title"])
 
     return new_list # Can we use this as a helper for other commands?
 
@@ -440,6 +453,7 @@ def compile():
     print(f"These are the books with the tag {target_tag}: ")
     for book in books_with_target_tag:
         print(book)
+
 
 
 if __name__ == "__main__":

@@ -1,0 +1,33 @@
+{
+    "lastEdited": "2022-08-16",
+    "book_list": [
+        {
+            "title": "Dune",
+            "author": "Frank Herbert",
+            "state": "Read",
+            "priority": "53",
+            "tags": [
+                "science fiction",
+                "ecology",
+                "good"
+            ]
+        },
+        {
+            "title": "Beowulf",
+            "author": "",
+            "state": "Unknown",
+            "priority": "0"
+        },
+        {
+            "title": "Bible",
+            "author": "",
+            "state": "Read",
+            "priority": "100"
+        }
+    ],
+    "tag_list": [
+        "ecology",
+        "good",
+        "science fiction"
+    ]
+}

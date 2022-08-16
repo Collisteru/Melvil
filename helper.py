@@ -61,28 +61,6 @@ def check_user_input(command: str, option: int = 0):
             print(f"Please enter a value of type {english_option}")
 
 
-"""
-Asks the user for a value in the status enumeration, and keeps asking until the user gives one.
-Returns the index of the status enum corresponding to the user's choice.
-"""
-# TODO: Use inquirer for this.
-def request_state():
-    question = """
-    Select one of the status options below by inputting one of the four numbers:
-
-    1 -- To Read
-    2 -- Reading
-    3 -- Read
-    4 -- Reviewed
-    """
-
-    while True:
-        user_input = check_user_input(question, 1)
-        if not user_input in range(1, 5):
-            print("Invalid state request. \n\n Input either 1, 2, 3, or 4.")
-            continue
-        else:
-            return int(user_input)
 
 """
 Params:

@@ -14,14 +14,21 @@ app = typer.Typer()
 VERSION = "0.3.0"
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 STATES = ["Unknown", "To Read", "Reading", "Read", "Reviewed"]
-FILE_NAME = "mortimer.json"
+DEFAULT_FILE_NAME = "mortimer.json"
 
+# Mortimer only keeps track of one booklist at a time, but this booklist can be saved anywhere the user wants to save
+# it. Mortimer keeps track of where that booklist is saved by saving its path.
+# Note that this includes all the information Mortimer needs to find the proper file to edit:
 
 """
 Initialize JSON in location specified by user or, if none, the working directory.
 """
 @app.command()
 def init():
+
+    # We're going to save the custom location the user provides in a file named config.txt in the same folder
+    # as the one the user specifies. Mortimer will search for whatever file is specified in config.txt whenever
+    # the time comes.
     def file_validation(answers, current):
         if current.endswith(".json") == False:
             # We allow an empty answer; this just goes to the default location saved in the global variable FILE_NAME.
@@ -39,7 +46,7 @@ def init():
 
     # If no file name is provided, use the current working directory
     if answers["file_name"] == "":
-        location = os.getcwd() + "/" + FILE_NAME
+        location = os.getcwd() + "/" + DEFAULT_FILE_NAME
     else:
         # Else use the file name provided by the user. Either way, we initialize the file in the current working directory (TODO: we should refactor this to be more flexible).
         location = os.getcwd() + "/" + answers["file_name"]
@@ -142,7 +149,7 @@ def add(
         tags = [value for value in tag_answers.values()]
         book["tags"] = tags
     else:
-        tags = []
+        book["tags"] = []
 
 
     # Convert the dictionary to JSON, load the JSON of the file holding the books, append this JSON to the other JSON,
@@ -235,7 +242,7 @@ def advance():
                       message="What is the title of the book you want to change the status of?",
                       ),
         inquirer.List('state',
-                      message="Change to which target state?",
+                      # message="Change to which target state?",
                       choices=STATES,
                       ),
     ]
@@ -259,7 +266,6 @@ def advance():
 
     h.write_file(raw_json)
     print(f"Changed the status of {book['title']} to {target_state}")
-
     return
 
 """

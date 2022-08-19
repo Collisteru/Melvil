@@ -16,10 +16,13 @@ class TitleNotFoundException(Exception):
 """
 Reads mortimer.json and outputs a dictionary
 """
-def read_file():
-    with open("mortimer.json") as file: # w+ Overwrites an existing file if one already exists. You cannot ignore this! This is not nothing! new_book = json.loads(book_json)
-        json_dict = json.load(file)
-        return json_dict
+def read_file(file_path: str= "") -> dict:
+    if file_path == "":
+        with open("mortimer.json", "r") as file:
+            return json.load(file) # This is a dictionary
+    else:
+        with open(file_path, "r") as file:
+            return json.load(file)
 
 """
 Writes to mortimer.json given a dictionary object

@@ -13,16 +13,10 @@
             ]
         },
         {
-            "title": "Beowulf",
-            "author": "",
-            "state": "Unknown",
-            "priority": "0"
-        },
-        {
             "title": "Bible",
             "author": "",
             "state": "Read",
-            "priority": "100"
+            "priority": "25"
         }
     ],
     "tag_list": [

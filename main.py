@@ -7,6 +7,17 @@ import helper as h
 import inquirer
 from pprint import pprint
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 
 TODAY = str(date.today())
 app = typer.Typer()
@@ -265,7 +276,6 @@ def advance():
     book = raw_json["book_list"][book_index]
     print("book: ", book)
 
-    # KeyError... title?
     state_question = [
         inquirer.List('state',
                       message=f"Change {book['title']} to which target state?",
@@ -504,18 +514,19 @@ def compile():
 Delete all the books in the list and the corresponding list of global tags. Not to be used lightly!
 """
 @app.command()
-# TODO: Make the text red.
 def delete():
     OPTIONS = ["Yes", "No"]
 
     question = [
-        inquirer.Text('confirmation',
-                      message="WARNING: This action will delete ALL The Books in your list. Are you sure you want to do this? (Yes/No)",
+        inquirer.List('confirmation',
+                      message=f"{bcolors.WARNING}WARNING:{bcolors.ENDC} This will delete all the books in your list. Are you sure you want to do this? (Yes/No)",
+                      choices=OPTIONS,
                       ),
     ]
+    # List index out of range. But why?
     to_exterminate = inquirer.prompt(question)["confirmation"]
 
-    if to_exterminate == "Yes" or to_exterminate == "yes" or to_exterminate == "Y" or to_exterminate == "y":
+    if to_exterminate == "Yes":
         raw_json = h.read_file()
         raw_json["book_list"] = []
         raw_json["tag_list"] = []

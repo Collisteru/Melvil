@@ -1,49 +1,6 @@
 {
     "lastEdited": "2022-08-19",
-    "book_list": [
-        {
-            "title": "Newbook",
-            "author": "",
-            "state": "Reading",
-            "priority": "3",
-            "tags": []
-        },
-        {
-            "title": "Thingimajigger",
-            "author": "",
-            "state": "Reviewed",
-            "priority": "33",
-            "tags": [
-                "first"
-            ]
-        },
-        {
-            "title": "Oe",
-            "author": "",
-            "state": "Unknown",
-            "priority": "0",
-            "tags": [
-                "new",
-                "one"
-            ]
-        },
-        {
-            "title": "One",
-            "author": "",
-            "state": "Unknown",
-            "priority": "0",
-            "tags": [
-                "d"
-            ]
-        },
-        {
-            "title": "The Name of the Rose",
-            "author": "",
-            "state": "Unknown",
-            "priority": "0",
-            "tags": []
-        }
-    ],
+    "book_list": [],
     "tag_list": [
         "third",
         "first",

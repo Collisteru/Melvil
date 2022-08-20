@@ -500,6 +500,29 @@ def compile():
         print(book)
 
 
+"""
+Delete all the books in the list and the corresponding list of global tags. Not to be used lightly!
+"""
+@app.command()
+# TODO: Make the text red.
+def delete():
+    OPTIONS = ["Yes", "No"]
+
+    question = [
+        inquirer.Text('confirmation',
+                      message="WARNING: This action will delete ALL The Books in your list. Are you sure you want to do this? (Yes/No)",
+                      ),
+    ]
+    to_exterminate = inquirer.prompt(question)["confirmation"]
+
+    if to_exterminate == "Yes" or to_exterminate == "yes" or to_exterminate == "Y" or to_exterminate == "y":
+        raw_json = h.read_file()
+        raw_json["book_list"] = []
+        raw_json["tag_list"] = []
+        h.write_file(raw_json)
+        print("All books and tags have been deleted.")
+    else:
+        print("Action aborted.")
 
 if __name__ == "__main__":
       app()

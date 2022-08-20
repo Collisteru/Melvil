@@ -305,6 +305,7 @@ def skim():
         return
 
     book = raw_json["book_list"][book_index]
+    print(f"Skimming the closest match {book['title']}:\n")
     book_keys = book.keys()
     book_values = book.values()
     keys_to_values = zip(book.keys(), book.values())
@@ -325,12 +326,8 @@ def prioritize():
                       ),
     ]
 
-
-
-
-    # Use fuzzy search to figure out which book the user is asking for, then tell them what we've found
-    # and ask them to choose the new state.
-
+    # Use fuzzy search to figure out which book the user is asking for, then tell them what we've
+    # found and ask them to choose the new state.
     asked_title_question = inquirer.prompt(title_question)
 
     # Get the index of the target book
@@ -368,22 +365,17 @@ Adds the target tag to the target book.
 """
 @app.command()
 def tag():
-    question = [
+    title_question = [
         inquirer.Text('title',
                       message="Which book would you like to tag?",
                       ),
-        inquirer.Text('tag',
-                      message=f"What tag would you like to add to this book?",
-                      ),
-    ]
-    answers = inquirer.prompt(question)
-    target_book = answers["title"]
-    tag = answers["tag"]
+        ]
 
+
+    target_book = inquirer.prompt(title_question)["title"]
+
+    # Get the index of the book with the nearest title to the one we've typed in.
     raw_json = h.read_file()
-
-    # While we repeat this packet of code often, there's not much we can do about it. It's useful and there's no way to make it
-    # more compact without paying by making the interface more complex.
     try:
         book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
     except h.TitleNotFoundException:
@@ -391,15 +383,26 @@ def tag():
         return
     book = raw_json["book_list"][book_index]
 
-    # Change the state of the target title to the target state
-    book["tags"].append(tag)
+    # Let the user know which book we've selected as the closest match and have them choose which tags to add.
+    tag_question = [
+        inquirer.Text('tag',
+                      message=f"What tag would you like to add to {book['title']}?",
+                      ),
+    ]
+
+    tag_answer = inquirer.prompt(tag_question)
+    tag_to_add = tag_answer["tag"]
+
+    # Add the target tag to the target title
+    book["tags"].append(tag_to_add)
     h.write_file(raw_json)
-    print(f"Added the tag {tag} to target book {book}.")
+    print(f"Added the tag {tag_to_add} to target book {book['title']}.")
 
 """
 Removes the target tag from the target book.
 """
 @app.command()
+# TODO: Make untag fuzzy.
 def untag():
     question = [
         inquirer.Text('title',
@@ -450,7 +453,6 @@ def lookup():
     raw_json = h.read_file()
     book_catalog = raw_json["book_list"]
     title_catalog = [book["title"] for book in book_catalog]
-    # TODO: Use fuzzy_search for this.
 
     num_results = max(1, round(h.SEARCH_FRACTION*len(book_catalog)))
     print(f"These are the {num_results} titles that most closely match your query: ")

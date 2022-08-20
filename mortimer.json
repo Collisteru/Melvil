@@ -6,13 +6,15 @@
             "author": "",
             "state": "Reading",
             "priority": "3",
-            "tags": []
+            "tags": [
+                "second"
+            ]
         },
         {
             "title": "Thingimajigger",
             "author": "",
             "state": "Reviewed",
-            "priority": "3",
+            "priority": "33",
             "tags": []
         },
         {
@@ -20,14 +22,19 @@
             "author": "",
             "state": "Unknown",
             "priority": "0",
-            "tags": []
+            "tags": [
+                "new",
+                "one"
+            ]
         },
         {
             "title": "One",
             "author": "",
             "state": "Unknown",
             "priority": "0",
-            "tags": []
+            "tags": [
+                "d"
+            ]
         }
     ],
     "tag_list": [

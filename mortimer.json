@@ -1,27 +1,38 @@
 {
-    "lastEdited": "2022-08-16",
+    "lastEdited": "2022-08-19",
     "book_list": [
         {
-            "title": "Dune",
-            "author": "Frank Herbert",
-            "state": "Read",
-            "priority": "53",
-            "tags": [
-                "science fiction",
-                "ecology",
-                "good"
-            ]
+            "title": "Newbook",
+            "author": "",
+            "state": "Reading",
+            "priority": "3",
+            "tags": []
         },
         {
-            "title": "Bible",
+            "title": "Thingimajigger",
             "author": "",
-            "state": "Read",
-            "priority": "25"
+            "state": "Reviewed",
+            "priority": "3",
+            "tags": []
+        },
+        {
+            "title": "Oe",
+            "author": "",
+            "state": "Unknown",
+            "priority": "0",
+            "tags": []
+        },
+        {
+            "title": "One",
+            "author": "",
+            "state": "Unknown",
+            "priority": "0",
+            "tags": []
         }
     ],
     "tag_list": [
-        "ecology",
-        "good",
-        "science fiction"
+        "first",
+        "second",
+        "third"
     ]
 }

@@ -146,10 +146,12 @@ def add(
             tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
 
         tag_answers = inquirer.prompt(tag_questions)
-        tags = [value for value in tag_answers.values()]
-        book["tags"] = tags
+        new_tag_list = [value for value in tag_answers.values()]
+        book["tags"] = new_tag_list
     else:
+        new_tag_list = []
         book["tags"] = []
+
 
 
     # Convert the dictionary to JSON, load the JSON of the file holding the books, append this JSON to the other JSON,
@@ -165,7 +167,7 @@ def add(
     # Add new tags to the taglist
     old_tag_set = set(old_data["tag_list"])
 
-    new_tag_set = set(tags).union(old_tag_set)
+    new_tag_set = set(new_tag_list).union(old_tag_set)
 
     # Update JSON data with new booklist and taglist
     old_data["book_list"] = old_book_list
@@ -183,6 +185,7 @@ def add(
 """
 Searches the database for a book with this title. Deletes the book with that title or, if there
 are no such books, lets the user know this.
+(Search is non-fuzzy to prevent accidental deletions.)
 """
 @app.command()
 def remove():
@@ -238,18 +241,17 @@ Ugh, this is going to be a nightmare to test.
 """
 @app.command()
 def advance():
-    question = [
+    # Key Error title
+    title_question = [
         inquirer.Text('title',
                       message="What is the title of the book you want to change the status of?",
-                      ),
-        inquirer.List('state',
-                      # message="Change to which target state?",
-                      choices=STATES,
-                      ),
+                     )
     ]
-    answers = inquirer.prompt(question)
-    target_book = answers["title"]
-    target_state = answers["state"]
+    # Use fuzzy search to figure out which book the user is asking for, then tell them what we've found
+    # and ask them to choose the new state.
+
+    asked_title_question = inquirer.prompt(title_question)
+    target_book = asked_title_question["title"]
 
     # Get the index of the target book
     raw_json = h.read_file()
@@ -261,6 +263,19 @@ def advance():
 
     # Change the state of the target title to the target state
     book = raw_json["book_list"][book_index]
+    print("book: ", book)
+
+    # KeyError... title?
+    state_question = [
+        inquirer.List('state',
+                      message=f"Change {book['title']} to which target state?",
+                      choices=STATES,
+                      ),
+    ]
+
+    asked_state_question = inquirer.prompt(state_question)
+    target_state = asked_state_question["state"]
+
     book["state"] = target_state
     raw_json["book_list"][book_index] = book
     assert(type(raw_json) == dict)
@@ -304,27 +319,43 @@ Changes the status of target book to target status.
 def prioritize():
 
     # Get the index of the target book
-    # TODO: Make a function for getting a title
-    question = [
+    title_question = [
         inquirer.Text('title',
                       message="Which book would you like to prioritize?",
                       ),
-        inquirer.Text('priority',
-                      message="What priority to set this book to?",
-                      validate=h.verify_priority, )
     ]
-    answers = inquirer.prompt(question)
-    target_book = answers["title"]
-    target_priority = answers["priority"]
 
+
+
+
+    # Use fuzzy search to figure out which book the user is asking for, then tell them what we've found
+    # and ask them to choose the new state.
+
+    asked_title_question = inquirer.prompt(title_question)
+
+    # Get the index of the target book
     raw_json = h.read_file()
     try:
-        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
+        book_index = h.fuzzy_search_booklist(asked_title_question, raw_json["book_list"])
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
 
     # Change the state of the target title to the target state
+    book = raw_json["book_list"][book_index]
+
+    priority_question = [
+        inquirer.Text('priority',
+                      message=f"What priority would you like to set {book['title']} to?",
+                      validate=h.verify_priority, )
+    ]
+
+    asked_priority_question = inquirer.prompt(priority_question)
+    target_priority = asked_priority_question["priority"]
+
+    book["priority"] = target_priority
+
+    # Change the priority of the target title to the target priority
     book = raw_json["book_list"][book_index]
     book["priority"] = target_priority
 
@@ -350,14 +381,17 @@ def tag():
     tag = answers["tag"]
 
     raw_json = h.read_file()
+
+    # While we repeat this packet of code often, there's not much we can do about it. It's useful and there's no way to make it
+    # more compact without paying by making the interface more complex.
     try:
         book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
+    book = raw_json["book_list"][book_index]
 
     # Change the state of the target title to the target state
-    book = raw_json["book_list"][book_index]
     book["tags"].append(tag)
     h.write_file(raw_json)
     print(f"Added the tag {tag} to target book {book}.")

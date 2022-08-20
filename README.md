@@ -1,6 +1,6 @@
 # Mortimer
 
-TODO: Add quote from Mortimer Adler here
+[//] <> (TODO: Add quote from Mortimer Adler here)
 
 ## The Command-line Book Management Tool
 

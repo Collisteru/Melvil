@@ -371,7 +371,6 @@ def tag():
                       ),
         ]
 
-
     target_book = inquirer.prompt(title_question)["title"]
 
     # Get the index of the book with the nearest title to the one we've typed in.
@@ -386,7 +385,7 @@ def tag():
     # Let the user know which book we've selected as the closest match and have them choose which tags to add.
     tag_question = [
         inquirer.Text('tag',
-                      message=f"What tag would you like to add to {book['title']}?",
+                      message=f"What tag would you like to add to the closest title match, {book['title']}?",
                       ),
     ]
 
@@ -402,38 +401,41 @@ def tag():
 Removes the target tag from the target book.
 """
 @app.command()
-# TODO: Make untag fuzzy.
 def untag():
-    question = [
+    title_question = [
         inquirer.Text('title',
                       message="Which book would you like to untag?",
                       ),
-        inquirer.Text('tag',
-                      message="What tag would you like to remove from this book?",
-                        ),
-    ]
-    answers = inquirer.prompt(question)
-    target_book_input = answers["title"]
-    target_tag = answers["tag"]
+        ]
 
+    title_answer = inquirer.prompt(title_question)["title"]
     raw_json = h.read_file()
+
     try:
-        book_index = h.fuzzy_search_booklist(target_book_input, raw_json["book_list"])
+        book_index = h.fuzzy_search_booklist(title_answer, raw_json["book_list"])
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
-
-    # Get the target tag
     target_book = raw_json["book_list"][book_index]
-    # Search list of tags for target tag
+
+    tag_question = [
+        inquirer.Text('tag',
+                      message=f"What tag would you like to remove from the closest title match, {target_book['title']}?",
+                      ),
+    ]
+
+    tag_answer = inquirer.prompt(tag_question)
+    target_tag = tag_answer["tag"]
+
+    # We have the target tag and the target book.
+    # Now, search the booklist for
     for tag in target_book["tags"]:
         if tag.strip() == target_tag:
-            print(target_book["tags"])
             target_book["tags"].remove(target_tag)
             new_taglist = target_book["tags"]
             raw_json["book_list"][book_index]["tags"] = new_taglist
             h.write_file(raw_json)
-            print(f"Removed tag {target_tag} from {target_book_input}")
+            print(f"Removed tag {target_tag} from {target_book['title']}")
             return
     print(f"{target_tag} isn't a tag of {target_book['title']}")
 

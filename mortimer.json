@@ -6,16 +6,16 @@
             "author": "",
             "state": "Reading",
             "priority": "3",
-            "tags": [
-                "second"
-            ]
+            "tags": []
         },
         {
             "title": "Thingimajigger",
             "author": "",
             "state": "Reviewed",
             "priority": "33",
-            "tags": []
+            "tags": [
+                "first"
+            ]
         },
         {
             "title": "Oe",
@@ -35,11 +35,18 @@
             "tags": [
                 "d"
             ]
+        },
+        {
+            "title": "The Name of the Rose",
+            "author": "",
+            "state": "Unknown",
+            "priority": "0",
+            "tags": []
         }
     ],
     "tag_list": [
+        "third",
         "first",
-        "second",
-        "third"
+        "second"
     ]
 }

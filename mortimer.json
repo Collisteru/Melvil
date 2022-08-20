@@ -1,5 +1,1518 @@
 {
     "lastEdited": "2022-08-19",
-    "book_list": [],
-    "tag_list": []
+    "book_list": [
+        {
+            "title": "Biography of Benjamin Franklin",
+            "author": "Isaacson",
+            "state": "Unknown",
+            "priority": "0",
+            "tags": []
+        },
+        {
+            "title": "Overcoming Procrastination",
+            "author": "Flore",
+            "state": "To Read",
+            "priority": "99",
+            "tags": [
+                "nonfiction",
+                "sociology",
+                "self-help",
+                "psychology"
+            ]
+        },
+        {
+            "title": "What Should I do With My Life",
+            "author": "Brnason",
+            "state": "To Read",
+            "priority": "30",
+            "tags": [
+                "self-help",
+                "advice",
+                "planning"
+            ]
+        },
+        {
+            "title": "The Art of Fiction",
+            "author": "Rand",
+            "state": "To Read",
+            "priority": "30",
+            "tags": [
+                "fiction",
+                "writing"
+            ]
+        },
+        {
+            "title": "Flore ",
+            "author": " Overcoming Procrastination",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Rand ",
+            "author": " The Art of Fiction",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "What should I do with my life",
+            "author": " Branson",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Future",
+            "author": " Al Gore",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Tools of Titans ",
+            "author": " Tim Ferris",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "glassboxmedicine.com",
+            "author": " ''",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Road to Reality ",
+            "author": " Roger Penrose",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "S ",
+            "author": " J. J. Abrams",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Roots of Progress",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Feynman Lectures on Physics ",
+            "author": " Richard Feynman",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Stoa Blog",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "On Writing Well -- The Classic Guide to Writing Nonfiction",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "A book on meditation",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "An article about the Universal Approximation Theorem in Machine Learning",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Familar ",
+            "author": " Danielewski",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Western Canon",
+            "author": " Harold Bloom",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Multiple Giftedness in adults 2009",
+            "author": " Bernstein",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Mother of Learning",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Some Academic Review of Stoicism and Stoic Ethics",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Mark Rosenfielder's Almea",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Moonwalking with Einstein",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Fabric of Reality",
+            "author": " David Deutsch",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Jorge Luis Borges",
+            "author": " Selected Nonfictions",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "THe Enchiridion of Epictetus",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Story Craft",
+            "author": " The Complete Guide to Writing Narrative Nonfiction ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Natural language generation THe commercial state of the art in 2020",
+            "author": " cambridge university press",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Story of Civilization ",
+            "author": " Will Durant",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "intelligence.org/files/LOGI.pdf",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Milton ",
+            "author": " Paradise Lost",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Essays ",
+            "author": " Francis Bacon",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Variety of Life ",
+            "author": " Colin Tudge",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Research Adaptive Neural Networks",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Tempest",
+            "author": " Shakespeare",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Structure of Scientific Revolutions",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Scientific Freedom",
+            "author": " The Elixir of Civilization",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Essays ",
+            "author": " Samo Burja",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Understanding the Brain",
+            "author": " From Cells to Behavior to Cognition ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Ficciones ",
+            "author": " Jorge LUis Borges",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Brothers Karamazov",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The MOst Powerful Idea in the World ",
+            "author": " William Rosen",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Michel de Montaigne",
+            "author": " Essyas",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The World of Orion's Arm",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " The Merchant of Venice",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Visualizing convolutional neural networks",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Quine and other Analytic Philosophers",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "To Engineer is Human",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Marion Tinsley and Chinook Checkers",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Ten simple rules for the computational modeling of behavioral data",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Foundation ",
+            "author": " Isaac Asimov",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " King Lear",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Sex at Dawn ",
+            "author": " Christopher ryann",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "La Comedie Humaine",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Othello",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Euclid",
+            "author": " the Elements`",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Leaves of Grass",
+            "author": " Walt Whitman",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Interdisciplinary Conversations",
+            "author": " Challenging Habits of Thought",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Thus Spake Zarathustra",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Mind Illuminated",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Rise and Fall of the Third Reich ",
+            "author": " William L. Shirer",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Zen and the Art of Motorcyle Maintenance",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Sequences",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Bats of the Republic",
+            "author": " An Illuminated Novel",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "William Janes",
+            "author": " Pragmatism",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Destiny Disrupted",
+            "author": " A History of the World Through Islamic Eyes ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Bringing Down the House ",
+            "author": " Ben Mezrich",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Mastering the Core Teachings of the Buddha",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "ARG Sources",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Global Commonwealth of Citizens",
+            "author": " Towards a Cosmopolitan Democracy",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Hamlet",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Book on string theory",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Henry V",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Lewis Mumford Technic and Civilisation",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Hopscotch",
+            "author": " Julio Cortazar",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Works and Wisdom of Arhur Schopenhauer",
+            "author": " Schopenhauer",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "A Random Walk Down Wall Street",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Game and Puzzle Design ",
+            "author": " Cameron Browne",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "A Sense of an Ending ",
+            "author": " Both the novel ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Mystery.doc",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Beginning of Infinity",
+            "author": " Explanations that Change the World",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Hume",
+            "author": " An Inquiry Concerning Human Understanding",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Franz Kafka",
+            "author": " The Metamorphosis",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Rape of the Lock",
+            "author": " Alexander Pop",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Newton",
+            "author": " Principia Mathematica",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Complete Works of Ralph Waldo Emerson (Especially Vol. VII",
+            "author": " Society and Solitude",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "On Liberty",
+            "author": " Hill",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Essays ",
+            "author": " Orwell",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Capital",
+            "author": " Marx",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Histories ",
+            "author": " Herodotus",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Bulfinch's Mythology",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Robert's Rules of Order",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Psychology of Computer Programming",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Meditations ",
+            "author": " Marcus Aurelius",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Discourse on the Method",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Nature of Plants ",
+            "author": " Craig N. Huegel",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Celeste Video Game",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Decline of the West",
+            "author": " Spengler",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Principles",
+            "author": " Ray Dalio",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Law's Order",
+            "author": " David Friedman",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Bhagavad Gita",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Kant",
+            "author": " Critique of Pure Reason",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Wikipedia",
+            "author": " List of weight training exercises",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Macbeth",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Enlightenment",
+            "author": " The Pursuit of Happiness ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Source Control HOWTO",
+            "author": " Eric Sink",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Tao te Ching",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Born to Run ",
+            "author": " Christopher McDougall",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Rising Sun ",
+            "author": " john Toland",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Book on the rise of Western Culture",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Leonardo da Vinci's Notebooks",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Candide",
+            "author": " Voltaire",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Wauntum Generations",
+            "author": " A History of PHysics in the Twentieth Century ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Universe in a Nutshell ",
+            "author": " Hawking",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "NIsa",
+            "author": " THe Life and Words of a !Kung Woman ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Treatises on Principles of Govt",
+            "author": " Locke",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Biographia Literaria",
+            "author": " Coleridge",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Quants ",
+            "author": " Scott Patterson",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Human Diversity ",
+            "author": " Charles Murray",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Lyrical Ballads",
+            "author": " Coleridge",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Paleontology",
+            "author": " A Brief History of Life ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Multiple Choice ",
+            "author": " Alejandro Sambra",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Elements of Typographic Style ",
+            "author": " Robert Bringhurst",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The complete I Ching ",
+            "author": " Master Lafred Huang",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Class ",
+            "author": " Faul Fussell",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Predictably Irrational",
+            "author": " Dan Ariely",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Dhammapada",
+            "author": " Buddha",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Hegel",
+            "author": " The Philosophy of History",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Ender's Game",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Napoleon's Wars",
+            "author": " An International Histoyr ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Writer's Journey",
+            "author": " Mythinc Structure for Writers",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "An INquiry into the Nature and Causes of the Wealth of Nations ",
+            "author": " Adam Smith",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Code Book ",
+            "author": " Simon Singh",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Animals in Translation ",
+            "author": " Temple Grandin",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "You Shall Know Our Velocity",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Plutarch",
+            "author": " Parallel Lives",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Computational Modeling",
+            "author": " nibib.nih.gov",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Rousseau",
+            "author": " Discourse on Inequality",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Chrysanthemum and the Sword",
+            "author": " Patterns of Japanese Culture ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Montesquieu",
+            "author": " The Spirit of Laws",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Areopagitica",
+            "author": " Milton",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Saints and Psychopaths ",
+            "author": " William Hamilton",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Cymbeline",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Henvy VIII",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Julius Caesar",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Jena",
+            "author": "Jacques Rousseau The Social Contract",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Decline and Fall of the Roman Empire",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Coriolanus",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Book on Muslim Philosophy",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Kahneman Thinking",
+            "author": " Fast and Slow",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Mengzi ",
+            "author": " Mencius",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Against INterpretation ",
+            "author": " Susan Sontag",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Huckleberry Finn",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Nudge ",
+            "author": " Richard Thaler",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Neuromancer ",
+            "author": " Willian Gibson",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Through the Language Glass ",
+            "author": " Guy Deutsch",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " A Winter's Tale",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Rand",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Ecclesiastes",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Mindfulness in Plain English ",
+            "author": " Bjhante Gunarantana",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Poems ",
+            "author": " Emily Dickinson",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Precipice",
+            "author": " Toby Ord",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Bell Curve ",
+            "author": " Charles Murray",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Twelfth Night",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Life and Poetry of Zen Master Ryokan ",
+            "author": " Kazuaki Tanahashi",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Birth of the Modern Mind",
+            "author": " The Intellectual History of the 17th and 18th centuries",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "softwarefoundations.cis.upenn.edu",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Burke",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Rational CHoice in an Uncertain World",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Impro Improvisation and the Theatre",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Spinoza",
+            "author": " Ethics",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Usefulness of Useless Knowledge",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Antifragile ",
+            "author": " Nassim Nicholas Taleb",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Africa's World War ",
+            "author": " Gerard Prunier",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "A Distant Mirror",
+            "author": " The Calamitous 14th Century ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The 4",
+            "author": "Hour Worweek ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Citizenship in a Republic ",
+            "author": " Theo. Roosevelt",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Escape From Hell",
+            "author": " Larry Niven",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Vital Question ",
+            "author": " Nick Lane",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Proudhon",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Don't Sleep",
+            "author": " there are snakes ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Locke",
+            "author": " An Essay Concerning Human Understanding",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Sonnets",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Wrong Enemy America in Afghanistan",
+            "author": " Carlotta Gall",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Cicero On Friendship",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Strategy ",
+            "author": " Freedman",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Soul fof A New Machine ",
+            "author": " Tracy Kidder",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Behind the beautiful Forevers",
+            "author": " Life",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Explding the PHone ",
+            "author": " Phil Lapsey",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " A Midsummer Night's Dream",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Love's Labours Lost",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Smith",
+            "author": " The Wealth of Nations",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Livy",
+            "author": " History of Rome",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Fukuyama",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "On the INterpretation of Dreams",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Pericles",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Feeling Good",
+            "author": " A New Mood Therapy (CBT)",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Plato",
+            "author": " The Republic",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Lucretius",
+            "author": " On the Nature of Things",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Much ado About Nothing",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Timon of Athens",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Compilation of shargrol's posts at dharmaoverground",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Measure for Measure",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespere",
+            "author": " The Henry IV Trilogy",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Plotinus Enneads",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Henry IV",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Research most prolfiic people",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Art of Intrusion",
+            "author": " The Real Stories behind Hackers ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "March of the Microbes ",
+            "author": " John Ingraham",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Uncovering the New World Columbus Created",
+            "author": " Charles Mann",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Two Gentlemen of Verona",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Two Noble Kinsman",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Art of Happiness ",
+            "author": " the Dalai Lama",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Francis Bacon",
+            "author": " Novum Organum",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "CodeBullet AI Videos",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Richard II ",
+            "author": " Shakespeare",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The lives of the twelve Caesars",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Out of Povery ",
+            "author": " Paul Polak",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Innovator's Dlemma ",
+            "author": " Clayton Christensen",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Seven Days in the Art World ",
+            "author": " Sarah Thornton",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Envisioning INformation ",
+            "author": " Edward Tufte",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "As You Like It",
+            "author": " Shakespeare",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "John Donne",
+            "author": " Poems",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Kierkegaard",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Prelude",
+            "author": " WIlliam Wordswroth",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Collapse ",
+            "author": " How societies choose to fail or succeed ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Ready Player One",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "A Companion to Ethics",
+            "author": " Edited ",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Moneyball ",
+            "author": " Michal Lewis",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Romeo and Juliet",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "A Study of History ",
+            "author": " Alfred Toynbee",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "A Field Guide to Lucid Dreaming ",
+            "author": " Dylan Tuccillo",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Taming of the Shrew",
+            "author": " Shakespeare",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Most Likely to Succeed: Preparing Our Kids for the InnovationEra",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The first 20 Hours",
+            "author": " How to learn anything fast",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "King John",
+            "author": " Shakspeare",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Comedy of Errors",
+            "author": " Shakespeare",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "New Atlantis",
+            "author": " Francis Bacon",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Troilus and Cressida",
+            "author": " Shakespeare",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Poems ",
+            "author": " Horace",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "The Merry Wives of Windsor",
+            "author": " Shakespeare",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Intelligent Virtue ",
+            "author": " Julia Annas",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "All's Well that ends Well",
+            "author": " Shakespeare",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Western Culture Today and Tomorrow",
+            "author": " Addressing the Fundamental Issues",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Shakespeare",
+            "author": " Antony and Cleopatra",
+            "priority": 0,
+            "tags": []
+        },
+        {
+            "title": "Bulfinch's Mythology ",
+            "author": "",
+            "priority": 0,
+            "tags": []
+        }
+    ],
+    "tag_list": [
+        "writing",
+        "sociology",
+        "fiction",
+        "nonfiction",
+        "self-help",
+        "advice",
+        "planning"
+    ]
 }

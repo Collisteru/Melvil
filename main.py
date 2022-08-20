@@ -1,10 +1,12 @@
 from typing import Optional
 import os
 import typer
+import csv
 from datetime import date
 import json
 import helper as h
 import inquirer
+import inquirer.errors
 from pprint import pprint
 
 class bcolors:
@@ -192,6 +194,44 @@ def add(
         print(f"{book['title']} by {book['author']} added to the list.")
     else:
         print(f"{book['title']} added to the list.")
+
+"""
+Add an author to a book that's already in the list.
+"""
+@app.command()
+def attribute():
+    # Get the title of the target book
+    title_question = [
+        inquirer.Text('title',
+                      message="What is the title of the book you want to change the status of?",
+                      )
+    ]
+
+    # Use fuzzy search to figure out which book the user is asking for, then tell them what we've found
+    # and ask them to choose the new state.
+    asked_title_question = inquirer.prompt(title_question)
+    target_book = asked_title_question["title"]
+
+    # Get the index of the target book
+    raw_json = h.read_file()
+    try:
+        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
+    except h.TitleNotFoundException:
+        print("There are no books with that title in your list.")
+        return
+
+    # Change the state of the target title to the target state
+    book = raw_json["book_list"][book_index]
+
+    attribute_question = [
+        inquirer.Text('attribute',
+                      message="What author do you want to add to this book?",
+                      )
+    ]
+
+    attribute_answer = inquirer.prompt(attribute_question)
+    book["author"] = attribute_answer["attribute"]
+    h.write_file(raw_json)
 
 """
 Searches the database for a book with this title. Deletes the book with that title or, if there
@@ -508,6 +548,53 @@ def compile():
     print(f"These are the books with the tag {target_tag}: ")
     for book in books_with_target_tag:
         print(book)
+
+"""
+Takes a path to a CSV file and adds each book and its author (if there is one) to the JSON file
+"""
+@app.command()
+def transcribe():
+    def csv_validation(answers, current):
+        if current.endswith(".csv") == False:
+            # We allow an empty answer; this just goes to the default location saved in the global variable FILE_NAME.
+            if(current == ""):
+                return True
+            print("Not a valid file name. Please use a .csv file.")
+            raise inquirer.errors.ValidationError('', reason='Please use the .csv file extension.')
+        return True
+
+    transcription_question = [
+        inquirer.Text("file_to_transcribe",
+                      message="Choose a csv file to add to the book list in this directory.",
+                      validate=csv_validation,
+        )
+    ]
+
+    transcription_answer = inquirer.prompt(transcription_question)["file_to_transcribe"]
+
+    raw_json = h.read_file()
+    book_catalog = raw_json["book_list"]
+
+    print("transcription_answer: ", transcription_answer)
+    with open(transcription_answer, "r") as csv_file:
+        print("csv_file: ", csv_file)
+        csv_reader = csv.reader(csv_file, delimiter=",")
+        for row in csv_reader:
+            print("row: ", row)
+            # Interestingly, teaking list slices lie this is safe, much like the .get() method.
+            if (row[0:1] and row[1:2]):
+                book_catalog.append({"title": row[0], "author": row[1], "priority": 0, "tags": []})
+            elif (row[0:1]):
+                book_catalog.append({"title": row[0], "author": "", "priority": 0, "tags": []})
+            else:
+                # Empty row...?
+                pass
+    h.write_file(raw_json)
+    print("Transcribed")
+
+
+
+
 
 
 """

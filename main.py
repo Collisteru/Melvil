@@ -592,11 +592,6 @@ def transcribe():
     h.write_file(raw_json)
     print("Transcribed")
 
-
-
-
-
-
 """
 Delete all the books in the list and the corresponding list of global tags. Not to be used lightly!
 """

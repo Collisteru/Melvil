@@ -214,6 +214,7 @@ def remove():
 Prints the contents of the list in order of greatest-to-least priority.
 """
 @app.command()
+# TODO: Add flag to show priority too.
 def flip(helper: bool=False):
     raw_json = h.read_file()
 

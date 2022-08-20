@@ -26,7 +26,7 @@ Mortimer stores your books in a JSON file. Each book contains information about:
 * A state of being read
 * A priority (Position in the list)
 
-Mortimer has many features that improve its user experience, like:
+There are many features that make your life easier:
 
 * Smooth command line interaction with [Typer](https://github.com/tiangolo/typer) and [Inquirer](https://github.com/kazhala/InquirerPy)
 * Fuzzy searching for book titles for nearly all commands, so you don't have to type the whole title every time. Don't remember a title name? No problem, fuzzy search by tag is available, too.

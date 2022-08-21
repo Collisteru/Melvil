@@ -33,11 +33,17 @@ DEFAULT_FILE_NAME = "mortimer.json"
 # it. Mortimer keeps track of where that booklist is saved by saving its path.
 # Note that this includes all the information Mortimer needs to find the proper file to edit:
 
-"""
-Initialize JSON in location specified by user or, if none, the working directory.
-"""
+@app.callback()
+def callback():
+    """
+    Mortimer, the command-line book management tool.
+    """
+
 @app.command()
 def init():
+    """
+    Initialize book list.
+    """
 
     # We're going to save the custom location the user provides in a file named config.txt in the same folder
     # as the one the user specifies. Mortimer will search for whatever file is specified in config.txt whenever
@@ -76,8 +82,7 @@ def init():
         file.write(json_string)
 
 
-# TODO: Check for and eliminate duplicates
-# Change this to add flags based on what information the user wants to add. The title is required
+# TODO: Change this to add flags based on what information the user wants to add. The title is required.
 # TODO: Change so that you only need to input the title unless you use flags to input more.
 @app.command()
 def add(
@@ -86,6 +91,9 @@ def add(
         priority: bool = typer.Option(False, "--priority", "-p", help="Specify the priority of this book relative to others (changes the ordering of the list)."),
         tags: bool = typer.Option(False, "--tags", "-t", help="Specify whether you would like to add tags to this book now.")
 ):
+    """
+    Add a book.
+    """
 
     # Capture info about the new book
     author_question = [
@@ -195,15 +203,15 @@ def add(
     else:
         print(f"{book['title']} added to the list.")
 
-"""
-Add an author to a book that's already in the list.
-"""
 @app.command()
 def attribute():
+    """
+    Add an author to a book.
+    """
     # Get the title of the target book
     title_question = [
         inquirer.Text('title',
-                      message="What is the title of the book you want to change the status of?",
+                      message="What is the title of the book you want to change the author of?",
                       )
     ]
 
@@ -233,13 +241,11 @@ def attribute():
     book["author"] = attribute_answer["attribute"]
     h.write_file(raw_json)
 
-"""
-Searches the database for a book with this title. Deletes the book with that title or, if there
-are no such books, lets the user know this.
-(Search is non-fuzzy to prevent accidental deletions.)
-"""
 @app.command()
 def remove():
+    """
+    Remove a book.
+    """
     question = [
         inquirer.Text('title',
                       message="What is the title of the book you want to remove?",
@@ -264,12 +270,14 @@ def remove():
     raw_json["book_list"] = new_book_list
     h.write_file(raw_json)
 
-"""
-Prints the contents of the list in order of greatest-to-least priority.
-"""
 @app.command()
 # TODO: Add flag to show priority too.
-def flip(helper: bool=False):
+def flip(helper: bool=False
+
+         ):
+    """
+    Prints list contents in order of decreasing priority.
+    """
     raw_json = h.read_file()
 
     book_list = raw_json["book_list"]
@@ -286,12 +294,11 @@ def flip(helper: bool=False):
 
     return new_list # Can we use this as a helper for other commands?
 
-"""
-Changes the status of target book to target status.
-Ugh, this is going to be a nightmare to test.
-"""
 @app.command()
 def advance():
+    """
+    Change book status.
+    """
     # Key Error title
     title_question = [
         inquirer.Text('title',
@@ -334,11 +341,11 @@ def advance():
     print(f"Changed the status of {book['title']} to {target_state}")
     return
 
-"""
-Lists all the attributes of the single input book.
-"""
 @app.command()
 def skim():
+    """
+    List attributes of one book.
+    """
     question = [
         inquirer.Text('title',
                       message="Which book would you like to skim?",
@@ -362,13 +369,11 @@ def skim():
     for pair in keys_to_values:
         print(f"{pair[0]}: {pair[1]}")
 
-
-"""
-Changes the status of target book to target status.
-"""
 @app.command()
 def prioritize():
-
+    """
+    Change priority of a single book in the list.
+    """
     # Get the index of the target book
     title_question = [
         inquirer.Text('title',
@@ -410,11 +415,11 @@ def prioritize():
 
     return
 
-"""
-Adds the target tag to the target book.
-"""
 @app.command()
 def tag():
+    """
+    Tag a book that's already in the list.
+    """
     title_question = [
         inquirer.Text('title',
                       message="Which book would you like to tag?",
@@ -432,12 +437,39 @@ def tag():
         return
     book = raw_json["book_list"][book_index]
 
-    # Let the user know which book we've selected as the closest match and have them choose which tags to add.
-    tag_question = [
-        inquirer.Text('tag',
-                      message=f"What tag would you like to add to the closest title match, {book['title']}?",
-                      ),
+    tag_number_question = [
+        inquirer.Text(
+            'tag_num',
+            message=f"How many tags would you like to add to the closest title match, {book['title']}?",
+            validate= h.force_int
+        ),
     ]
+    tag_number_input = inquirer.prompt(tag_number_question)
+
+    # Fill in the tags accordingly
+    tag_questions = []
+    for i in range(int(tag_number_input["tag_num"])):
+        tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
+
+
+    tag_answers = inquirer.prompt(tag_questions)
+    new_tag_list = [value for value in tag_answers.values()]
+    book["tags"] = new_tag_list
+
+
+# Be careful with all the code below in here:
+    tag_questions = []
+
+    # We know it's safe to convert the tag_num answer into an integer because force_int passed verification.
+    for i in range(int(tag_answers["tag_num"])):
+        tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
+
+    tag_answers = inquirer.prompt(tag_questions)
+    new_tag_list = [value for value in tag_answers.values()]
+    book["tags"] = new_tag_list
+
+
+
 
     tag_answer = inquirer.prompt(tag_question)
     tag_to_add = tag_answer["tag"]
@@ -447,11 +479,12 @@ def tag():
     h.write_file(raw_json)
     print(f"Added the tag {tag_to_add} to target book {book['title']}.")
 
-"""
-Removes the target tag from the target book.
-"""
+
 @app.command()
 def untag():
+    """
+    Remove a tag from a book that's already in the list.
+    """
     title_question = [
         inquirer.Text('title',
                       message="Which book would you like to untag?",
@@ -467,6 +500,15 @@ def untag():
         print("There are no books with that title in your list.")
         return
     target_book = raw_json["book_list"][book_index]
+
+    # List tags the book already has for the user's convenience
+    if target_book["tags"] == []:
+        print(f"{target_book['title']} doesn't have any tags to remove, silly!")
+        return
+    else:
+        print(f"The following tags are in {target_book['title']}")
+        for tag in target_book["tags"]:
+            print(tag)
 
     tag_question = [
         inquirer.Text('tag',
@@ -489,11 +531,11 @@ def untag():
             return
     print(f"{target_tag} isn't a tag of {target_book['title']}")
 
-"""
-Search by title: Fuzzy search returns all the book titles that roughly match your target by sifting the results of flip.
-"""
 @app.command()
 def lookup():
+    """
+    Search for a book by title.
+    """
     question = [
         inquirer.Text('title',
                       message="Which book would you like to look up?",
@@ -514,18 +556,11 @@ def lookup():
         print(top_result)
         book_catalog.pop(top_result_index)
 
-"""
-Search by tag functionality. 
-
-
-Figure out what tag the user wants in a robust way by creating an ordered lists of tags by greatest-to-least
-Levenshtein distance from the given query.
-
-We just fuzzy search the set based on the user's query and select the topmost tag. Then we iterate over the list of books that have that tag
-, and then we spit out all the titles that include such tags attached to them.
-"""
 @app.command()
 def compile():
+    """
+    Search for all books with a given tag.
+    """
     search_query = input("Which tag would you like to search for? ")
 
     raw_json = h.read_file()
@@ -549,11 +584,11 @@ def compile():
     for book in books_with_target_tag:
         print(book)
 
-"""
-Takes a path to a CSV file and adds each book and its author (if there is one) to the JSON file
-"""
 @app.command()
 def transcribe():
+    """
+    Add books from a CSV file in the format of "book title", "book author" to the book list.
+    """
     def csv_validation(answers, current):
         if current.endswith(".csv") == False:
             # We allow an empty answer; this just goes to the default location saved in the global variable FILE_NAME.
@@ -592,11 +627,11 @@ def transcribe():
     h.write_file(raw_json)
     print("Transcribed")
 
-"""
-Delete all the books in the list and the corresponding list of global tags. Not to be used lightly!
-"""
 @app.command()
 def delete():
+    """
+    Delete all the books in the list. Not to be used lightly!
+    """
     OPTIONS = ["Yes", "No"]
 
     question = [
@@ -616,6 +651,15 @@ def delete():
         print("All books and tags have been deleted.")
     else:
         print("Action aborted.")
+
+@app.command()
+def count():
+    """
+    Print list length.
+    """
+    raw_json = h.read_file()
+    book_catalog = raw_json["book_list"]
+    print(f"There are {len(book_catalog)} books in this list.")
 
 if __name__ == "__main__":
       app()

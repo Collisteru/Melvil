@@ -4403,7 +4403,7 @@
         },
         {
             "title": "Introduction to Cosmology by Barbara Ryden",
-            "author": "",
+            "author": "Barbara Ryden",
             "priority": 0,
             "tags": []
         },
@@ -4592,15 +4592,27 @@
             "author": "",
             "priority": 0,
             "tags": []
+        },
+        {
+            "title": "The Lord of the Rings",
+            "author": "J. R. R. Tolkien",
+            "state": "Read",
+            "priority": "85",
+            "tags": [
+                "fantasy",
+                "fiction"
+            ]
         }
     ],
     "tag_list": [
-        "writing",
-        "sociology",
         "fiction",
-        "nonfiction",
-        "self-help",
+        "sociology",
         "advice",
-        "planning"
+        "nonfiction",
+        "writing",
+        "self-help",
+        "planning",
+        "epic fantasy",
+        "fantasy"
     ]
 }

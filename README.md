@@ -4,7 +4,7 @@
 
 ## The Command-line Book Management Tool
 
-Melvil aims to be the most user-friendly command line tool available for managing books. People who like math,
+Melvil aims to be the most user-friendly command line tool available for managing books. People who like convenience,
 speed, and owning their own data will like Melvil.
 
 Install with `install.sh`

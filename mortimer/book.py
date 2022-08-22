@@ -1,85 +1,6 @@
-from typing import Optional
-import os
-import typer
-import csv
-from datetime import date
-import json
+# A file for commands that affect a single book.
+from mortimer.main import app, inquirer, STATES, typer
 import helper as h
-import inquirer
-import inquirer.errors
-from pprint import pprint
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-
-TODAY = str(date.today())
-app = typer.Typer()
-
-VERSION = "0.3.0"
-CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
-STATES = ["Unknown", "To Read", "Reading", "Read", "Reviewed"]
-DEFAULT_FILE_NAME = "mortimer.json"
-
-# Mortimer only keeps track of one booklist at a time, but this booklist can be saved anywhere the user wants to save
-# it. Mortimer keeps track of where that booklist is saved by saving its path.
-# Note that this includes all the information Mortimer needs to find the proper file to edit:
-
-@app.callback()
-def callback():
-    """
-    Mortimer, the command-line book management tool.
-    """
-
-@app.command()
-def init():
-    """
-    Initialize book list.
-    """
-
-    # We're going to save the custom location the user provides in a file named config.txt in the same folder
-    # as the one the user specifies. Mortimer will search for whatever file is specified in config.txt whenever
-    # the time comes.
-    def file_validation(answers, current):
-        if current.endswith(".json") == False:
-            # We allow an empty answer; this just goes to the default location saved in the global variable FILE_NAME.
-            if(current == ""):
-                return True
-            print("Not a valid file name. Please use a .json file.")
-            raise inquirer.errors.ValidationError('', reason='Please use a .json file extension.')
-        return True
-
-    # Inquire as to the desired location
-    questions = [
-        inquirer.Text('file_name', message="Please enter the file you would like to designate as the storage file for your books.", validate=file_validation)
-    ]
-    answers = inquirer.prompt(questions)
-
-    # If no file name is provided, use the current working directory
-    if answers["file_name"] == "":
-        location = os.getcwd() + "/" + DEFAULT_FILE_NAME
-    else:
-        # Else use the file name provided by the user. Either way, we initialize the file in the current working directory (TODO: we should refactor this to be more flexible).
-        location = os.getcwd() + "/" + answers["file_name"]
-
-    # Initialize book dictionary
-    initDict = {}
-    initDict['lastEdited'] = TODAY
-    initDict['book_list'] = [] # An empty list indicates that no books have been added yet.
-    initDict["tag_list"] = []
-    json_string = json.dumps(initDict, indent=4)
-    os.makedirs(os.path.dirname(location), exist_ok=True)
-    with open(location, "w+") as file:
-        print(f"New JSON file initialized at {location}")
-        file.write(json_string)
 
 
 # TODO: Change this to add flags based on what information the user wants to add. The title is required.
@@ -89,7 +10,8 @@ def add(
         author: bool = typer.Option(False, "--author", "-a", help="Specify the author of the book"),
         state: bool = typer.Option(False, "--state", "-s", help="Specify what stage you are at in reading this book."),
         priority: bool = typer.Option(False, "--priority", "-p", help="Specify the priority of this book relative to others (changes the ordering of the list)."),
-        tags: bool = typer.Option(False, "--tags", "-t", help="Specify whether you would like to add tags to this book now.")
+        tags: bool = typer.Option(False, "--tags", "-t", help="Specify whether you would like to add tags to this book now."),
+        custom: bool = typer.Option(False, "--custom", "-c", help="Add your own field to the book.")
 ):
     """
     Add a book.
@@ -123,6 +45,12 @@ def add(
                       )
     ]
 
+    custom_field_question = [
+        inquirer.Text('custom_field_name',
+                      message="What custom field would you like to add?",
+                      )
+    ]
+
     # Define the book as a dictionary, filling in its keys with values depending on what the user has decided
     # to specify with flags.
     book = {}
@@ -135,7 +63,12 @@ def add(
     ]
 
     title_answer = inquirer.prompt(title_question)
-    book['title'] = title_answer['title']
+
+    try:
+        book['title'] = title_answer['title']
+    except:
+        print("Empty title, aborting.")
+        sys.exit(0)
 
     # Define author, conditional on flag
     if author:
@@ -174,6 +107,13 @@ def add(
         book["tags"] = []
 
 
+    if custom:
+        custom_field_input = inquirer.prompt(custom_field_question)
+        custom_field_value = [
+            inquirer.Text('custom_field_value',
+                          message=f"What value should we add to the custom field {custom_field_input['custom_field_name']}?"
+                          )
+        ]
 
     # Convert the dictionary to JSON, load the JSON of the file holding the books, append this JSON to the other JSON,
     # and dump it all back into the file.
@@ -202,6 +142,7 @@ def add(
         print(f"{book['title']} by {book['author']} added to the list.")
     else:
         print(f"{book['title']} added to the list.")
+
 
 @app.command()
 def attribute():
@@ -270,104 +211,7 @@ def remove():
     raw_json["book_list"] = new_book_list
     h.write_file(raw_json)
 
-@app.command()
-# TODO: Add flag to show priority too.
-def flip(helper: bool=False
 
-         ):
-    """
-    Prints list contents in order of decreasing priority.
-    """
-    raw_json = h.read_file()
-
-    book_list = raw_json["book_list"]
-    new_list = sorted(book_list, key=lambda d: int(d['priority']), reverse=True)
-
-    # Sometimes, we want to use this function internally to get a title catalog.
-    # In these cases, we don't want to print the list to the user.
-    if not helper:
-        for book in new_list:
-            if book["author"]:
-                print(book["title"] + " by " + book["author"])
-            else:
-                print(book["title"])
-
-    return new_list # Can we use this as a helper for other commands?
-
-@app.command()
-def advance():
-    """
-    Change book status.
-    """
-    # Key Error title
-    title_question = [
-        inquirer.Text('title',
-                      message="What is the title of the book you want to change the status of?",
-                     )
-    ]
-    # Use fuzzy search to figure out which book the user is asking for, then tell them what we've found
-    # and ask them to choose the new state.
-
-    asked_title_question = inquirer.prompt(title_question)
-    target_book = asked_title_question["title"]
-
-    # Get the index of the target book
-    raw_json = h.read_file()
-    try:
-        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
-    except h.TitleNotFoundException:
-        print("There are no books with that title in your list.")
-        return
-
-    # Change the state of the target title to the target state
-    book = raw_json["book_list"][book_index]
-    print("book: ", book)
-
-    state_question = [
-        inquirer.List('state',
-                      message=f"Change {book['title']} to which target state?",
-                      choices=STATES,
-                      ),
-    ]
-
-    asked_state_question = inquirer.prompt(state_question)
-    target_state = asked_state_question["state"]
-
-    book["state"] = target_state
-    raw_json["book_list"][book_index] = book
-    assert(type(raw_json) == dict)
-
-    h.write_file(raw_json)
-    print(f"Changed the status of {book['title']} to {target_state}")
-    return
-
-@app.command()
-def skim():
-    """
-    List attributes of one book.
-    """
-    question = [
-        inquirer.Text('title',
-                      message="Which book would you like to skim?",
-                      ),
-    ]
-    answers = inquirer.prompt(question)
-    target_book = answers["title"]
-    raw_json = h.read_file()
-
-    try:
-        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
-    except h.TitleNotFoundException:
-        print("There are no books with that title in your list.")
-        return
-
-    book = raw_json["book_list"][book_index]
-    print(f"Skimming the closest match {book['title']}:\n")
-    book_keys = book.keys()
-    book_values = book.values()
-    keys_to_values = zip(book.keys(), book.values())
-    for pair in keys_to_values:
-        print(f"{pair[0]}: {pair[1]}")
 
 @app.command()
 def prioritize():
@@ -412,8 +256,8 @@ def prioritize():
     book["priority"] = target_priority
 
     h.write_file(raw_json)
-
     return
+
 
 @app.command()
 def tag():
@@ -424,7 +268,7 @@ def tag():
         inquirer.Text('title',
                       message="Which book would you like to tag?",
                       ),
-        ]
+    ]
 
     target_book = inquirer.prompt(title_question)["title"]
 
@@ -446,6 +290,7 @@ def tag():
     ]
     tag_number_input = inquirer.prompt(tag_number_question)
 
+
     # Fill in the tags accordingly
     tag_questions = []
     for i in range(int(tag_number_input["tag_num"])):
@@ -457,7 +302,7 @@ def tag():
     book["tags"] = new_tag_list
 
 
-# Be careful with all the code below in here:
+    # Be careful with all the code below in here:
     tag_questions = []
 
     # We know it's safe to convert the tag_num answer into an integer because force_int passed verification.
@@ -489,7 +334,7 @@ def untag():
         inquirer.Text('title',
                       message="Which book would you like to untag?",
                       ),
-        ]
+    ]
 
     title_answer = inquirer.prompt(title_question)["title"]
     raw_json = h.read_file()
@@ -531,135 +376,94 @@ def untag():
             return
     print(f"{target_tag} isn't a tag of {target_book['title']}")
 
+
+
+
 @app.command()
-def lookup():
+def skim():
     """
-    Search for a book by title.
+    List attributes of one book.
     """
     question = [
         inquirer.Text('title',
-                      message="Which book would you like to look up?",
+                      message="Which book would you like to skim?",
                       ),
     ]
     answers = inquirer.prompt(question)
-    search_query = answers["title"]
-
+    target_book = answers["title"]
     raw_json = h.read_file()
-    book_catalog = raw_json["book_list"]
-    title_catalog = [book["title"] for book in book_catalog]
 
-    num_results = max(1, round(h.SEARCH_FRACTION*len(book_catalog)))
-    print(f"These are the {num_results} titles that most closely match your query: ")
-    for result in range(num_results):
-        top_result_index = int(h.fuzzy_search_booklist(search_query, book_catalog))
-        top_result = title_catalog[top_result_index]
-        print(top_result)
-        book_catalog.pop(top_result_index)
+    try:
+        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
+    except h.TitleNotFoundException:
+        print("There are no books with that title in your list.")
+        return
+
+    book = raw_json["book_list"][book_index]
+    print(f"Skimming the closest match {book['title']}:\n")
+    book_keys = book.keys()
+    book_values = book.values()
+    keys_to_values = zip(book.keys(), book.values())
+    for pair in keys_to_values:
+        print(f"{pair[0]}: {pair[1]}")
+
 
 @app.command()
-def compile():
+def advance():
     """
-    Search for all books with a given tag.
+    Change book status.
     """
-    search_query = input("Which tag would you like to search for? ")
-
-    raw_json = h.read_file()
-    book_catalog = raw_json["book_list"]
-
-    tag_catalog = raw_json["tag_list"]
-    tag_to_levenshtein = {tag: h.fuzz.ratio(search_query, tag) for tag in tag_catalog}
-    sorted_tag_to_catalog = {k: v for k, v in sorted(tag_to_levenshtein.items(), key=lambda item: item[1])}
-    target_tag = sorted_tag_to_catalog.popitem()[0]
-
-    books_with_target_tag = []
-    for book in book_catalog:
-        try:
-            if target_tag in book["tags"]:
-                books_with_target_tag.append(book["title"])
-        except:
-            # This book has no tags. Nothing to worry about.
-            continue
-
-    print(f"These are the books with the tag {target_tag}: ")
-    for book in books_with_target_tag:
-        print(book)
-
-@app.command()
-def transcribe():
-    """
-    Add books from a CSV file in the format of "book title", "book author" to the book list.
-    """
-    def csv_validation(answers, current):
-        if current.endswith(".csv") == False:
-            # We allow an empty answer; this just goes to the default location saved in the global variable FILE_NAME.
-            if(current == ""):
-                return True
-            print("Not a valid file name. Please use a .csv file.")
-            raise inquirer.errors.ValidationError('', reason='Please use the .csv file extension.')
-        return True
-
-    transcription_question = [
-        inquirer.Text("file_to_transcribe",
-                      message="Choose a csv file to add to the book list in this directory.",
-                      validate=csv_validation,
-        )
+    # Key Error title
+    title_question = [
+        inquirer.Text('title',
+                      message="What is the title of the book you want to change the status of?",
+                      )
     ]
+    # Use fuzzy search to figure out which book the user is asking for, then tell them what we've found
+    # and ask them to choose the new state.
 
-    transcription_answer = inquirer.prompt(transcription_question)["file_to_transcribe"]
+    asked_title_question = inquirer.prompt(title_question)
+    target_book = asked_title_question["title"]
 
+    # Get the index of the target book
     raw_json = h.read_file()
-    book_catalog = raw_json["book_list"]
+    try:
+        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
+    except h.TitleNotFoundException:
+        print("There are no books with that title in your list.")
+        return
 
-    print("transcription_answer: ", transcription_answer)
-    with open(transcription_answer, "r") as csv_file:
-        print("csv_file: ", csv_file)
-        csv_reader = csv.reader(csv_file, delimiter=",")
-        for row in csv_reader:
-            print("row: ", row)
-            # Interestingly, teaking list slices lie this is safe, much like the .get() method.
-            if (row[0:1] and row[1:2]):
-                book_catalog.append({"title": row[0], "author": row[1], "priority": 0, "tags": []})
-            elif (row[0:1]):
-                book_catalog.append({"title": row[0], "author": "", "priority": 0, "tags": []})
-            else:
-                # Empty row...?
-                pass
-    h.write_file(raw_json)
-    print("Transcribed")
+    # Change the state of the target title to the target state
+    book = raw_json["book_list"][book_index]
+    print("book: ", book)
 
-@app.command()
-def delete():
-    """
-    Delete all the books in the list. Not to be used lightly!
-    """
-    OPTIONS = ["Yes", "No"]
-
-    question = [
-        inquirer.List('confirmation',
-                      message=f"{bcolors.WARNING}WARNING:{bcolors.ENDC} This will delete all the books in your list. Are you sure you want to do this? (Yes/No)",
-                      choices=OPTIONS,
+    state_question = [
+        inquirer.List('state',
+                      message=f"Change {book['title']} to which target state?",
+                      choices=STATES,
                       ),
     ]
-    # List index out of range. But why?
-    to_exterminate = inquirer.prompt(question)["confirmation"]
 
-    if to_exterminate == "Yes":
-        raw_json = h.read_file()
-        raw_json["book_list"] = []
-        raw_json["tag_list"] = []
-        h.write_file(raw_json)
-        print("All books and tags have been deleted.")
-    else:
-        print("Action aborted.")
+    asked_state_question = inquirer.prompt(state_question)
+    target_state = asked_state_question["state"]
 
-@app.command()
-def count():
-    """
-    Print list length.
-    """
-    raw_json = h.read_file()
-    book_catalog = raw_json["book_list"]
-    print(f"There are {len(book_catalog)} books in this list.")
+    book["state"] = target_state
+    raw_json["book_list"][book_index] = book
+    assert(type(raw_json) == dict)
 
-if __name__ == "__main__":
-      app()
+    h.write_file(raw_json)
+    print(f"Changed the status of {book['title']} to {target_state}")
+    return
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,17 +8,15 @@ import inquirer
 # total number of books in the catalog.
 SEARCH_FRACTION = 0.1
 
-
 class TitleNotFoundException(Exception):
     pass
-
 
 """
 Reads mortimer.json and outputs a dictionary
 """
 def read_file(file_path: str= "") -> dict:
     if file_path == "":
-        with open("mortimer.json", "r") as file:
+        with open("../mortimer.json", "r") as file:
             return json.load(file) # This is a dictionary
     else:
         with open(file_path, "r") as file:
@@ -29,7 +27,7 @@ Writes to mortimer.json given a dictionary object
 """
 def write_file(input: dict) -> None:
     json_string = json.dumps(input, indent=4)
-    with open("mortimer.json", "w") as file: # w+ Overwrites an existing file if one already exists. You cannot ignore this! This is not nothing!
+    with open("../mortimer.json", "w") as file: # w+ Overwrites an existing file if one already exists. You cannot ignore this! This is not nothing!
         file.write(json_string)
 
 
@@ -48,6 +46,7 @@ def check_user_input(command: str, option: int = 0):
         raise Exception("Invalid option input.")
     elif option == 0:
         user_input = input(f"{command}")
+        english_option = options_to_english[option]
     else:
         english_option = options_to_english[option]
 
@@ -62,7 +61,6 @@ def check_user_input(command: str, option: int = 0):
             return user_input
         except:
             print(f"Please enter a value of type {english_option}")
-
 
 
 """
@@ -117,6 +115,7 @@ def verify_priority(answers, current):
         raise inquirer.errors.ValidationError('', reason='Please enter a floating-point or integer number.')
     return True
 
+# TODO: Add a function that matches by ID instead of title
 
 # Tries to convert the answer into an int and returns True if successful. Otherwise, raises an error.
 def force_int(answers, current):
@@ -125,5 +124,3 @@ def force_int(answers, current):
     except:
         raise inquirer.errors.ValidationError('', reason='Please enter an integer.')
     return True
-# TODO: Add a function that matches by ID instead of title
-

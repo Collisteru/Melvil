@@ -1,11 +1,11 @@
+
 # A file for commands that affect a single book.
 from main import app, STATES
 import helper as h
 
 import typer, inquirer
 
-# TODO: Change this to add flags based on what information the user wants to add. The title is required.
-# TODO: Change so that you only need to input the title unless you use flags to input more.
+# TODO: Change so that a new file is written containing the title of the file you want to use.
 @app.command()
 def add(
         author: bool = typer.Option(False, "--author", "-a", help="Specify the author of the book"),
@@ -96,6 +96,10 @@ def add(
         tag_number_input = inquirer.prompt(tag_number_question)
         tag_questions = []
 
+        # Right now we have two problems: The loop loops doubly so that we have nine
+        # total iterations instead of three, and we get an error when we try to take
+        # tag_answers.values(). I think we can solve both of these on this very bus!
+
         # We know it's safe to convert the tag_num answer into an integer because force_int passed verification.
         for i in range(int(tag_number_input["tag_num"])):
             tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
@@ -143,7 +147,6 @@ def add(
         print(f"{book['title']} by {book['author']} added to the list.")
     else:
         print(f"{book['title']} added to the list.")
-
 
 @app.command()
 def attribute():
@@ -263,7 +266,8 @@ def prioritize():
 @app.command()
 def tag():
     """
-    Tag a book that's already in the list.
+    Tag a book that's already in the list. If that tag isn't in the tag catalog yet,
+    add it to the tag catalog.
     """
     title_question = [
         inquirer.Text('title',
@@ -280,8 +284,10 @@ def tag():
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
+
     book = raw_json["book_list"][book_index]
 
+    # Ask the user how many tags they would like to add
     tag_number_question = [
         inquirer.Text(
             'tag_num',
@@ -292,39 +298,29 @@ def tag():
     tag_number_input = inquirer.prompt(tag_number_question)
 
 
-    # Fill in the tags accordingly
+    # Create a number of tag questions equal to the number of tags the user wants.
     tag_questions = []
     for i in range(int(tag_number_input["tag_num"])):
         tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
 
-
+    # TPrompt the user
     tag_answers = inquirer.prompt(tag_questions)
+
+    # Fill in the new tag list with the user's desired tags.
     new_tag_list = [value for value in tag_answers.values()]
-    book["tags"] = new_tag_list
+    print("new_tag_list: ", new_tag_list)
 
+    # Add these tags to the book and to the tag catalog if they aren't already in the tag catalog
+    for new_tag in new_tag_list:
+        book["tags"].append(new_tag)
+        if not (new_tag in raw_json["tag_list"]):
+            raw_json["tag_list"].append(new_tag)
 
-    # Be careful with all the code below in here:
-    tag_questions = []
-
-    # We know it's safe to convert the tag_num answer into an integer because force_int passed verification.
-    for i in range(int(tag_answers["tag_num"])):
-        tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
-
-    tag_answers = inquirer.prompt(tag_questions)
-    new_tag_list = [value for value in tag_answers.values()]
-    book["tags"] = new_tag_list
-
-
-
-
-    tag_answer = inquirer.prompt(tag_question)
-    tag_to_add = tag_answer["tag"]
-
-    # Add the target tag to the target title
-    book["tags"].append(tag_to_add)
+    # Write and report to user.
     h.write_file(raw_json)
-    print(f"Added the tag {tag_to_add} to target book {book['title']}.")
-
+    print(f"Added the following tags to target book {book['title']}.")
+    for tag in new_tag_list:
+        print(tag)
 
 @app.command()
 def untag():
@@ -352,7 +348,7 @@ def untag():
         print(f"{target_book['title']} doesn't have any tags to remove, silly!")
         return
     else:
-        print(f"The following tags are in {target_book['title']}")
+        print(f"The following tags are in the closest match {target_book['title']}")
         for tag in target_book["tags"]:
             print(tag)
 
@@ -430,13 +426,15 @@ def advance():
     raw_json = h.read_file()
     try:
         book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
+        # Change the state of the target title to the target state
+        book = raw_json["book_list"][book_index]
+        print(f"The closest title match is {book['title']}")
     except h.TitleNotFoundException:
         print("There are no books with that title in your list.")
         return
 
     # Change the state of the target title to the target state
     book = raw_json["book_list"][book_index]
-    print("book: ", book)
 
     state_question = [
         inquirer.List('state',
@@ -455,16 +453,3 @@ def advance():
     h.write_file(raw_json)
     print(f"Changed the status of {book['title']} to {target_state}")
     return
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,8 +1,10 @@
 # This file focuses on commands that affect the entire booklist.
-from main import app, inquirer, STATES, typer, DEFAULT_FILE_NAME, TODAY
+from main import app, inquirer, STATES, typer, DEFAULT_FILE_NAME, TODAY, bcolors
 import helper as h
 
 import os
+import json
+import csv
 
 @app.command()
 def init():
@@ -35,9 +37,15 @@ def init():
         # Else use the file name provided by the user. Either way, we initialize the file in the current working directory (TODO: we should refactor this to be more flexible).
         location = os.getcwd() + "/" + answers["file_name"]
 
+    # Write filename in a reference PATH the program will use each time to find the file it wants.
+    with open("path.txt", 'w+') as path:
+        path.write(answers["file_name"].replace(" ", "_"))
+
+
     # Initialize book dictionary
     initDict = {}
-    initDict['lastEdited'] = TODAY
+    initDict['path'] = location
+    initDict['last_edited'] = TODAY
     initDict['book_list'] = [] # An empty list indicates that no books have been added yet.
     initDict["tag_list"] = []
     json_string = json.dumps(initDict, indent=4)
@@ -56,6 +64,7 @@ def compile():
     raw_json = h.read_file()
     book_catalog = raw_json["book_list"]
 
+    # Get tag catalog
     tag_catalog = raw_json["tag_list"]
     tag_to_levenshtein = {tag: h.fuzz.ratio(search_query, tag) for tag in tag_catalog}
     sorted_tag_to_catalog = {k: v for k, v in sorted(tag_to_levenshtein.items(), key=lambda item: item[1])}
@@ -74,6 +83,7 @@ def compile():
     for book in books_with_target_tag:
         print(book)
 
+
 @app.command()
 def delete():
     """
@@ -81,17 +91,19 @@ def delete():
     """
     OPTIONS = ["Yes", "No"]
 
+    raw_json = h.read_file()
+
     question = [
         inquirer.List('confirmation',
-                      message=f"{bcolors.WARNING}WARNING:{bcolors.ENDC} This will delete all the books in your list. Are you sure you want to do this? (Yes/No)",
+                      message=f"{bcolors.FAIL}WARNING: This will delete all the books in your list at {raw_json['path']}. {bcolors.ENDC} Are you sure you want to do this? (Yes/No)",
                       choices=OPTIONS,
                       ),
     ]
+
     # List index out of range. But why?
     to_exterminate = inquirer.prompt(question)["confirmation"]
 
     if to_exterminate == "Yes":
-        raw_json = h.read_file()
         raw_json["book_list"] = []
         raw_json["tag_list"] = []
         h.write_file(raw_json)
@@ -99,8 +111,9 @@ def delete():
     else:
         print("Action aborted.")
 
+
 @app.command()
-def transcribe(csv=None):
+def transcribe(csv_flag=None):
     """
     Add books from a CSV file in the format of "book title", "book author" to the book list.
     """
@@ -163,6 +176,23 @@ def flip(helper: bool=False):
                 print(book["title"])
 
     return new_list # Can we use this as a helper for other commands?
+
+@app.command()
+def classify(helper: bool=False):
+    """
+    Prints list of all tags.
+    """
+    raw_json = h.read_file()
+
+    tag_list = raw_json["tag_list"]
+    new_list = sorted(tag_list)
+
+    if not helper:
+        for tag in new_list:
+            print(tag)
+
+    return new_list
+
 
 @app.command()
 def count():

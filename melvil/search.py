@@ -2,6 +2,7 @@
 from main import app, inquirer, STATES, typer
 import helper as h
 
+# TODO: Possibly make this a scrollable list of the list ordered by reverse Levenshtein distance. Until then, keep the fraction of books listed high.
 @app.command()
 def lookup():
     """
@@ -20,7 +21,10 @@ def lookup():
     title_catalog = [book["title"] for book in book_catalog]
 
     num_results = max(1, round(h.SEARCH_FRACTION*len(book_catalog)))
-    print(f"These are the {num_results} titles that most closely match your query: ")
+    if num_results == 1:
+        print(f"This title most closely matches your query:")
+    else:
+        print(f"These are the {num_results} titles that most closely match your query: ")
     for result in range(num_results):
         top_result_index = int(h.fuzzy_search_booklist(search_query, book_catalog))
         top_result = title_catalog[top_result_index]

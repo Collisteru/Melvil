@@ -6,30 +6,38 @@ import inquirer
 
 # SEARCH_FRACTION Defines a "reasonable" number of search results for each query as a fraction of the
 # total number of books in the catalog.
-SEARCH_FRACTION = 0.1
+# Keep this on the high side. See search.py
+SEARCH_FRACTION = 0.3
 
 class TitleNotFoundException(Exception):
     pass
 
 """
-Reads melvil.json and outputs a dictionary
+Read file
 """
-def read_file(file_path: str= "") -> dict:
-    if file_path == "":
-        with open("melvil/melvil.json", "r") as file:
-            return json.load(file) # This is a dictionary
-    else:
-        with open(file_path, "r") as file:
-            return json.load(file)
+def read_file() -> dict:
+    try:
+        with open("path.txt", 'r') as path:
+            path = path.read()
+    except:
+        print("Can't read path file. Did you initialize a list with 'init'?")
+
+    with open(path, "r") as file:
+        return json.load(file)
 
 """
 Writes to melvil.json given a dictionary object
 """
 def write_file(input: dict) -> None:
     json_string = json.dumps(input, indent=4)
-    with open("melvil/melvil.json", "w") as file: # w+ Overwrites an existing file if one already exists. You cannot ignore this! This is not nothing!
-        file.write(json_string)
+    try:
+        with open("path.txt", 'r') as path:
+            path = path.read()
+    except:
+        print("Can't read path file. Did you initialize a list with 'init'?")
 
+    with open(path, "w") as file:
+        file.write(json_string)
 
 """
 Asks the user for a value of a certain data type, and keeps asking until the user gives it.
@@ -116,7 +124,6 @@ def verify_priority(answers, current):
     return True
 
 # TODO: Add a function that matches by ID instead of title
-
 # Tries to convert the answer into an int and returns True if successful. Otherwise, raises an error.
 def force_int(answers, current):
     try:

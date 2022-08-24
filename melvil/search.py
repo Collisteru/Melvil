@@ -1,5 +1,5 @@
 # A file containing functions related to search
-from main import app, inquirer, STATES, typer
+from main import app, STATES, typer
 import helper as h
 
 # TODO: Possibly make this a scrollable list of the list ordered by reverse Levenshtein distance. Until then, keep the fraction of books listed high.

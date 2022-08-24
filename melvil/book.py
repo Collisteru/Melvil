@@ -3,7 +3,7 @@
 from main import app, STATES
 import helper as h
 
-import typer, inquirer
+import typer
 
 # TODO: Change so that a new file is written containing the title of the file you want to use.
 @app.command()
@@ -215,8 +215,6 @@ def remove():
     raw_json["book_list"] = new_book_list
     h.write_file(raw_json)
 
-
-
 @app.command()
 def prioritize():
     """
@@ -261,7 +259,6 @@ def prioritize():
 
     h.write_file(raw_json)
     return
-
 
 @app.command()
 def tag():
@@ -373,9 +370,6 @@ def untag():
             return
     print(f"{target_tag} isn't a tag of {target_book['title']}")
 
-
-
-
 @app.command()
 def skim():
     """
@@ -403,7 +397,6 @@ def skim():
     keys_to_values = zip(book.keys(), book.values())
     for pair in keys_to_values:
         print(f"{pair[0]}: {pair[1]}")
-
 
 @app.command()
 def advance():

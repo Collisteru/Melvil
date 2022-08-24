@@ -1,7 +1,8 @@
 # This file focuses on commands that affect the entire booklist.
-from main import app, inquirer, STATES, typer, DEFAULT_FILE_NAME, TODAY, bcolors
+from main import app, STATES, typer, DEFAULT_FILE_NAME, TODAY, bcolors
 import helper as h
 
+import inquirer
 import os
 import json
 import csv
@@ -83,7 +84,6 @@ def compile():
     for book in books_with_target_tag:
         print(book)
 
-
 @app.command()
 def delete():
     """
@@ -110,7 +110,6 @@ def delete():
         print("All books and tags have been deleted.")
     else:
         print("Action aborted.")
-
 
 @app.command()
 def transcribe(csv_flag=None):
@@ -192,7 +191,6 @@ def classify(helper: bool=False):
             print(tag)
 
     return new_list
-
 
 @app.command()
 def count():

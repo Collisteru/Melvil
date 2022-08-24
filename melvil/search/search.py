@@ -1,6 +1,21 @@
 # A file containing functions related to search
-from main import app, STATES, typer
+from main import STATES
 import helper as h
+
+# Import app from parent directory. This requires a bit of a python path hack.
+import os
+import sys
+import inspect
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
+
+
+from app import app
+
+
+import typer
 
 # TODO: Possibly make this a scrollable list of the list ordered by reverse Levenshtein distance. Until then, keep the fraction of books listed high.
 @app.command()

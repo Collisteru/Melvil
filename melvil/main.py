@@ -10,6 +10,7 @@ DEFAULT_FILE_NAME = "melvil/melvil.json"
 
 import typer
 from datetime import date
+import pkgutil # Just for debugging purposes.
 
 TODAY = str(date.today())
 class bcolors:
@@ -25,11 +26,11 @@ class bcolors:
 
 app = typer.Typer()
 
-# Import other files
-from booklist import init, compile, delete, transcribe, flip, classify, count
-from book import add, attribute, remove, prioritize, tag, untag, skim, advance
-from search import lookup
-import helper as h # We have to do it this way becausse main does it this way and the other functions realy on that. It's a bit of a hack.
+# Import submodules
+from booklist.booklist import *
+from book.book import *
+from search.search import *
+from helper.helper import *
 
 # Testing that we have indeed imported the required packages...
 def EmptyTitleException(Exception):

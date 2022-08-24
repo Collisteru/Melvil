@@ -46,6 +46,6 @@ There are many features that make your life easier:
 * `tag` adds the given tag to the given book
 * `untag` removes the target tag from the given book
 * `lookup` searches by title
-* `investigate` searches by tag
+* `compile` searches by tag
 * `delete` clears the booklist
 

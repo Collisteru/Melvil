@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Mortimer.iml" filepath="$PROJECT_DIR$/.idea/Mortimer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Melvil/.idea/Melvil.iml" filepath="$PROJECT_DIR$/../Melvil/.idea/Melvil.iml" />
     </modules>
   </component>
 </project>

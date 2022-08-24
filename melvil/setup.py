@@ -1,7 +1,5 @@
-# Will this help us in any way with our current problem?
-from main import app, inquirer, STATES, typer
-
-
+# Helps the submodules import from a parent directory without sys.os hacks.
+# See: https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder
 
 from setuptools import setup, find_packages
 

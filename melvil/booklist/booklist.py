@@ -1,7 +1,20 @@
 # This file focuses on commands that affect the entire booklist.
-from mortimer.main import app, inquirer, STATES, typer
-import helper as h
 
+import inquirer
+import os
+import json
+import csv
+
+# Import app from parent directory. This requires a bit of a python path hack.
+import os
+import sys
+import inspect
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
+
+from app import app
 
 @app.command()
 def init():
@@ -10,7 +23,7 @@ def init():
     """
 
     # We're going to save the custom location the user provides in a file named config.txt in the same folder
-    # as the one the user specifies. Mortimer will search for whatever file is specified in config.txt whenever
+    # as the one the user specifies. Melvil will search for whatever file is specified in config.txt whenever
     # the time comes.
     def file_validation(answers, current):
         if current.endswith(".json") == False:
@@ -18,7 +31,7 @@ def init():
             if(current == ""):
                 return True
             print("Not a valid file name. Please use a .json file.")
-            raise inquirer.errors.ValidationError('', reason='Please use a .json file extension.')
+            return False
         return True
 
     # Inquire as to the desired location
@@ -34,9 +47,15 @@ def init():
         # Else use the file name provided by the user. Either way, we initialize the file in the current working directory (TODO: we should refactor this to be more flexible).
         location = os.getcwd() + "/" + answers["file_name"]
 
+    # Write filename in a reference PATH the program will use each time to find the file it wants.
+    with open("../path.txt", 'w+') as path:
+        path.write(answers["file_name"].replace(" ", "_"))
+
+
     # Initialize book dictionary
     initDict = {}
-    initDict['lastEdited'] = TODAY
+    initDict['path'] = location
+    initDict['last_edited'] = TODAY
     initDict['book_list'] = [] # An empty list indicates that no books have been added yet.
     initDict["tag_list"] = []
     json_string = json.dumps(initDict, indent=4)
@@ -55,6 +74,7 @@ def compile():
     raw_json = h.read_file()
     book_catalog = raw_json["book_list"]
 
+    # Get tag catalog
     tag_catalog = raw_json["tag_list"]
     tag_to_levenshtein = {tag: h.fuzz.ratio(search_query, tag) for tag in tag_catalog}
     sorted_tag_to_catalog = {k: v for k, v in sorted(tag_to_levenshtein.items(), key=lambda item: item[1])}
@@ -80,17 +100,19 @@ def delete():
     """
     OPTIONS = ["Yes", "No"]
 
+    raw_json = h.read_file()
+
     question = [
         inquirer.List('confirmation',
-                      message=f"{bcolors.WARNING}WARNING:{bcolors.ENDC} This will delete all the books in your list. Are you sure you want to do this? (Yes/No)",
+                      message=f"{bcolors.FAIL}WARNING: This will delete all the books in your list at {raw_json['path']}. {bcolors.ENDC} Are you sure you want to do this? (Yes/No)",
                       choices=OPTIONS,
                       ),
     ]
+
     # List index out of range. But why?
     to_exterminate = inquirer.prompt(question)["confirmation"]
 
     if to_exterminate == "Yes":
-        raw_json = h.read_file()
         raw_json["book_list"] = []
         raw_json["tag_list"] = []
         h.write_file(raw_json)
@@ -99,7 +121,7 @@ def delete():
         print("Action aborted.")
 
 @app.command()
-def transcribe():
+def transcribe(csv_flag=None):
     """
     Add books from a CSV file in the format of "book title", "book author" to the book list.
     """
@@ -162,6 +184,22 @@ def flip(helper: bool=False):
                 print(book["title"])
 
     return new_list # Can we use this as a helper for other commands?
+
+@app.command()
+def classify(helper: bool=False):
+    """
+    Prints list of all tags.
+    """
+    raw_json = h.read_file()
+
+    tag_list = raw_json["tag_list"]
+    new_list = sorted(tag_list)
+
+    if not helper:
+        for tag in new_list:
+            print(tag)
+
+    return new_list
 
 @app.command()
 def count():

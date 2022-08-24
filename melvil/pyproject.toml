@@ -1,13 +1,17 @@
 [tool.poetry]
-name = "mortimer"
+name = "melvil"
 version = "0.1.0"
 description = ""
 authors = ["Sean <sean14520@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.scripts]
-mortimer = "mortimer.main:app"
-helper = "mortimer.helper:*"
+mortimer = "main:app"
+helper = "helper:*"
+search = "search:*"
+booklist = "booklist:*"
+book = "book:*"
+
 
 [tool.poetry.dependencies]
 python = "^3.8"

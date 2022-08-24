@@ -1,3 +1,7 @@
-init
-test.js
-test.json
+cd melvil
+python main.py --help
+
+
+# Initialize a list
+python main.py init
+mortimer.json

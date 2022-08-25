@@ -13,8 +13,11 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
-from app import app
 
+
+from app import app
+# TODO: It may actually be possible to solve the interruption problem by adding a custom verify function that checks if the input contains a newline character or an interrupt character or another
+# special character and nothing else.
 
 
 # SEARCH_FRACTION Defines a "reasonable" number of search results for each query as a fraction of the
@@ -34,6 +37,7 @@ def read_file() -> dict:
             path = path.read()
     except:
         print("Can't read path file. Did you initialize a list with 'init'?")
+        sys.exit()
 
     with open(path, "r") as file:
         return json.load(file)
@@ -83,7 +87,6 @@ def check_user_input(command: str, option: int = 0):
         except:
             print(f"Please enter a value of type {english_option}")
 
-
 """
 Params:
 - Search query is the title of the book to find.
@@ -101,10 +104,9 @@ def fuzzy_search_booklist(search_query: str, book_list: list):
             print("Oops! Something went wrong in fuzzy_search_booklist!")
             return -1
 
-
     # Commence fuzzy search.
 
-    # Create an ordered list of book titles by greatest-to-least Levenshtein distance
+    # Create an ordered list of book titles by least-to-greatest Levenshtein distance
     # from the given query.
     title_catalog = [book["title"] for book in book_list]
     title_to_levenshtein = {title: fuzz.ratio(search_query, title) for title in title_catalog}
@@ -126,7 +128,6 @@ def fuzzy_search_booklist(search_query: str, book_list: list):
 
     # The list is empty
     print("Your list is empty!")
-
 
 # We just need a func that can accept integers or floats
 def verify_priority(answers, current):

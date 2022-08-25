@@ -16,6 +16,7 @@ from app import app
 STATES = ["Unknown", "To Read", "Reading", "Read", "Reviewed"]
 
 import typer
+import inquirer
 
 # TODO: Change so that a new file is written containing the title of the file you want to use.
 @app.command()

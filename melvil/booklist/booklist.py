@@ -5,6 +5,8 @@ import os
 import json
 import csv
 
+from helper import helper as h
+
 # Import app from parent directory. This requires a bit of a python path hack.
 import os
 import sys
@@ -15,6 +17,20 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
 from app import app
+from datetime import date
+
+
+TODAY = str(date.today())
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 @app.command()
 def init():
@@ -63,35 +79,6 @@ def init():
     with open(location, "w+") as file:
         print(f"New JSON file initialized at {location}")
         file.write(json_string)
-
-@app.command()
-def compile():
-    """
-    Search for all books with a given tag.
-    """
-    search_query = input("Which tag would you like to search for? ")
-
-    raw_json = h.read_file()
-    book_catalog = raw_json["book_list"]
-
-    # Get tag catalog
-    tag_catalog = raw_json["tag_list"]
-    tag_to_levenshtein = {tag: h.fuzz.ratio(search_query, tag) for tag in tag_catalog}
-    sorted_tag_to_catalog = {k: v for k, v in sorted(tag_to_levenshtein.items(), key=lambda item: item[1])}
-    target_tag = sorted_tag_to_catalog.popitem()[0]
-
-    books_with_target_tag = []
-    for book in book_catalog:
-        try:
-            if target_tag in book["tags"]:
-                books_with_target_tag.append(book["title"])
-        except:
-            # This book has no tags. Nothing to worry about.
-            continue
-
-    print(f"These are the books with the tag {target_tag}: ")
-    for book in books_with_target_tag:
-        print(book)
 
 @app.command()
 def delete():

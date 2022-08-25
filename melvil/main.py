@@ -31,6 +31,7 @@ from booklist.booklist import *
 from book.book import *
 from search.search import *
 from helper.helper import *
+from reading.reading import *
 
 # Testing that we have indeed imported the required packages...
 def EmptyTitleException(Exception):

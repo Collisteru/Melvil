@@ -1,19 +1,6 @@
 # Manages which books you are reading now.
 
-# Find the highest-priority book with the state reading and display it to the reader
-## Note; Should books in the 'reading' category be mutually exclusive?
-
-# Input a subdomain and add it as a book
-## Ah, now I see a purpose for the length field. We might be able to fill it automatically with wget and
-## display articles to the user depending on whether they want an article of short, long, or medium length
-
-# This is certainly an interesting idea, but it would be a long feature to implement and I'm not sure that I would use it.
-# Think: Is this *reallY* the best thing to do?
-
-# I think about how much I would wnat this to work. I would want it to be as frictionless as possible: impport a website with wget: assign each one
-## with a specific priority and possibly with the same tags.
-
-# At this point, though, creating a hierarhy of literature might be nice, so that when we tag a site all the children receive
+# At this point, though, creating a hierarchy of literature might be nice, so that when we tag a site all the children receive
 # the same tags, too.
 
 # Once again though, that would be hard to implement. Keep it simple, we're not geniuses, here.
@@ -53,8 +40,6 @@ def surf():
 
 # TODO: WRITE AND TEST SUBPROCESS CALL WHEN YOU HAVE ACCESS TO THE INTERNET AGAIN.
 
-
-
 # This function delivers the book you want to read next, which is defined as the book with the highest priority and the TO-READ
 # state. If there are no books in the list with the TO-READ state, then the function just delivers
 # the highest-priority book in the index, with books with undefined priority ranking last.
@@ -92,11 +77,28 @@ def next(): # Type not supported: class 'list'. Wat!?
     # If none of the books in the list have the to_read state, we must deliver general_first.
     # Otherwise, we must deliver the highest priority book with  the to read state.
 
-
-
-"""
-# Shows all the books with the READING tag.
+# This function delivers the book you're currently reading, which is defined as the book with the highest priority in the READING state.
 @app.command()
-def current():
-    print("The current flows all around us...")
-"""
+def reading():
+    raw_json = h.read_file()
+
+    unordered_book_list = raw_json["book_list"]
+
+    ordered_book_list = sorted(unordered_book_list, key=lambda k: k['priority'])
+
+    # TODO: ^^' Could have just used flip for the above, hehehe.
+    try:
+        general_first = ordered_book_list[0]
+    except:
+        print("No books to read. Try adding a book with 'add'.")
+        return
+
+    try:
+        for book in ordered_book_list:
+            if book['state'] == "To Read":
+                print(f"Found the book you're currently reading: {book['title']}")
+                return
+        print("You're not currently reading anything. Try adding a book with 'add', or finding a book to read with 'next'.")
+    except:
+        print("No books are in the booklist. Try adding a book with 'add'.")
+        return

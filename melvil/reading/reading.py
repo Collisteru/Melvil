@@ -18,6 +18,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
+import inquirer
 from app import app # Type not yet supported: class 'list'
 
 
@@ -28,24 +29,27 @@ from app import app # Type not yet supported: class 'list'
 ## for looking up blog catalogs. You'll want to try this with WordPress blogs, LessWrong, other website, etc.
 ## Basically, try it with all the websites you've posted on your own website.
 # Import all the articles from that subdomain.
-@app.command()
-def surf():
-    subdomain_question = [
-        inquirer.Text("Enter the URL prefix to take articles from. You should enter the prefix ending with a * that Melvil will replace with websites in that doman. For example, 'https;//en.wikipedia.org/*' would fill in with 'https://en.wikipedia.org/a, https://en.wikpedia.org/b, etc.'")
-    ]
-    subdomain = inquirer.prompt(subdomain_question)
 
-    print(f"Searching for all websites in {subdomain}: ")
+# Going to try this one:
+# https://python.plainenglish.io/scraping-the-subpages-on-a-website-ea2d4e3db113
+
+import requests
+from bs4 import BeautifulSoup
+from tqdm import tqdm
+import json
+
+
+
 
 
 # TODO: WRITE AND TEST SUBPROCESS CALL WHEN YOU HAVE ACCESS TO THE INTERNET AGAIN.
 
-# This function delivers the book you want to read next, which is defined as the book with the highest priority and the TO-READ
-# state. If there are no books in the list with the TO-READ state, then the function just delivers
+# This function delivers the book you want to read next, which is defined as the book with the highest priority and the
+# TO-READ state. If there are no books in the list with the TO-READ state, then the function just delivers
 # the highest-priority book in the index, with books with undefined priority ranking last.
 # If all books have no priority and are not to-read, this function just delivers the first book in an alphabetical sequence.
 @app.command() # Type not supported goes somewhere in here.
-def next(): # Type not supported: class 'list'. Wat!?
+def next(): # Type not supported: class 'list'.
 
     # Commence fuzzy search.
 
@@ -53,13 +57,9 @@ def next(): # Type not supported: class 'list'. Wat!?
     # from the given query.
     raw_json = h.read_file()
 
-
     unordered_book_list = raw_json["book_list"]
 
     ordered_book_list = sorted(unordered_book_list, key=lambda k: k['priority'])
-
-    # ^^ Could have just used flip for the above, hehehe.
-
 
     try:
         general_first = ordered_book_list[0]
@@ -73,7 +73,7 @@ def next(): # Type not supported: class 'list'. Wat!?
             print(f"Found a book to read: {book['title']}")
             return
 
-    print(f"Found a book to read: {book['title']}")
+        print(f"Found a book to read: {book['title']}")
     # If none of the books in the list have the to_read state, we must deliver general_first.
     # Otherwise, we must deliver the highest priority book with  the to read state.
 

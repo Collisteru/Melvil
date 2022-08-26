@@ -21,6 +21,7 @@ from datetime import date
 
 
 TODAY = str(date.today())
+DEFAULT_FILE_NAME= "melvil.json"
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'

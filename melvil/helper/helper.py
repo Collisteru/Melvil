@@ -39,8 +39,12 @@ def read_file() -> dict:
         print("Can't read path file. Did you initialize a list with 'init'?")
         sys.exit()
 
-    with open(path, "r") as file:
-        return json.load(file)
+    try:
+        with open(path, "r") as file:
+            return json.load(file)
+    except:
+        print("Invalid path in path file. Try modifying path.txt.")
+        sys.exit()
 
 """
 Writes to melvil.json given a dictionary object

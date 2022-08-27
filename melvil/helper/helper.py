@@ -33,7 +33,7 @@ Read file
 """
 def read_file() -> dict:
     try:
-        with open("../path.txt", 'r') as path:
+        with open("./path.txt", 'r') as path:
             path = path.read()
     except:
         print("Can't read path file. Did you initialize a list with 'init'?")
@@ -52,12 +52,13 @@ Writes to melvil.json given a dictionary object
 def write_file(input: dict) -> None:
     json_string = json.dumps(input, indent=4)
     try:
-        with open("../path.txt", 'r') as path:
+        with open("./path.txt", 'r') as path:
             path = path.read()
     except:
         print("Can't read path file. Did you initialize a list with 'init'?")
+        quit()
 
-    with open(path, "w") as file:
+    with open(path, "w") as file: # Local variable 'path' referenced before assignment. What could this mean?
         file.write(json_string)
 
 """

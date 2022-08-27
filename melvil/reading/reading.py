@@ -44,12 +44,14 @@ import json
 
 # TODO: WRITE AND TEST SUBPROCESS CALL WHEN YOU HAVE ACCESS TO THE INTERNET AGAIN.
 
-# This function delivers the book you want to read next, which is defined as the book with the highest priority and the
-# TO-READ state. If there are no books in the list with the TO-READ state, then the function just delivers
-# the highest-priority book in the index, with books with undefined priority ranking last.
-# If all books have no priority and are not to-read, this function just delivers the first book in an alphabetical sequence.
 @app.command() # Type not supported goes somewhere in here.
 def next(): # Type not supported: class 'list'.
+    """
+    Delivers the book you want to read next, defines the book with the highest priority and the "to-read" state.
+    If there are no books in the list with this state, then the function just delivers the highest-priority book
+    in the index, with a book with undefined priority ranking last. If all books have no priority and are not to-read, this function
+    just delivers the first book in an alphabetical sequence.
+    """
 
     # Commence fuzzy search.
 
@@ -77,9 +79,13 @@ def next(): # Type not supported: class 'list'.
     # If none of the books in the list have the to_read state, we must deliver general_first.
     # Otherwise, we must deliver the highest priority book with  the to read state.
 
-# This function delivers the book you're currently reading, which is defined as the book with the highest priority in the READING state.
 @app.command()
 def reading():
+    """
+    Delivers the book you are reading now, defined as the book with the highest priority in the reading state.
+    """
+
+
     raw_json = h.read_file()
 
     unordered_book_list = raw_json["book_list"]

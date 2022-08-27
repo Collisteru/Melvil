@@ -19,33 +19,42 @@ import typer
 
 # TODO: Possibly make this a scrollable list of the list ordered by reverse Levenshtein distance. Until then, keep the fraction of books listed high.
 @app.command()
-def lookup():
+def lookup(input_string="", helper=False):
     """
-    Search for a book by title.
+    This function has two versions: one is used when you want to use it as a helper function to another function, the other one is used when you want a function to be called directly by the user.
+    When helper is true, it searches the list for the book that most closely matches input_string and returns the index of that title in the book list.
+    When helper is false, it generates a list of the top few titles that most closely match the desired category and pipes that list to the stdout for the user's convenience.
     """
-    import inquirer
-    question = [
-        inquirer.Text('title',
-                      message="Which book would you like to look up?",
-                      ),
-    ]
-    answers = inquirer.prompt(question)
-    search_query = answers["title"]
 
     raw_json = h.read_file()
     book_catalog = raw_json["book_list"]
-    title_catalog = [book["title"] for book in book_catalog]
 
-    num_results = max(1, round(h.SEARCH_FRACTION*len(book_catalog)))
-    if num_results == 1:
-        print(f"This title most closely matches your query:")
+    if helper == True:
+        top_result_index = int(h.fuzzy_search_booklist(input_string, book_catalog))
+        return top_result_index
     else:
-        print(f"These are the {num_results} titles that most closely match your query: ")
-    for result in range(num_results):
-        top_result_index = int(h.fuzzy_search_booklist(search_query, book_catalog))
-        top_result = title_catalog[top_result_index]
-        print(top_result)
-        book_catalog.pop(top_result_index)
+        import inquirer
+        question = [
+            inquirer.Text('title',
+                          message="Which book would you like to look up?",
+                          ),
+        ]
+        answers = inquirer.prompt(question)
+        search_query = answers["title"]
+
+        title_catalog = [book["title"] for book in book_catalog]
+
+        num_results = max(1, round(h.SEARCH_FRACTION*len(book_catalog)))
+
+        if num_results == 1:
+            print(f"This title most closely matches your query:")
+        else:
+            print(f"These are the {num_results} titles that most closely match your query: ")
+        for result in range(num_results):
+            top_result_index = int(h.fuzzy_search_booklist(search_query, book_catalog))
+            top_result = title_catalog[top_result_index]
+            print(top_result)
+            book_catalog.pop(top_result_index)
 
 @app.command()
 def compile():

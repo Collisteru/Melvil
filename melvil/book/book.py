@@ -1,6 +1,6 @@
-
 # A file for commands that affect a single book.
 from helper import helper as h
+from search import search as s
 
 # Import app from parent directory. This requires a bit of a python path hack.
 import os
@@ -25,7 +25,6 @@ def add(
         state: bool = typer.Option(False, "--state", "-s", help="Specify what stage you are at in reading this book."),
         priority: bool = typer.Option(False, "--priority", "-p", help="Specify the priority of this book relative to others (changes the ordering of the list)."),
         tags: bool = typer.Option(False, "--tags", "-t", help="Specify whether you would like to add tags to this book now."),
-        custom: bool = typer.Option(False, "--custom", "-c", help="Add your own field to the book.")
 ):
     """
     Add a book.
@@ -59,11 +58,15 @@ def add(
                       )
     ]
 
-    custom_field_question = [
-        inquirer.Text('custom_field_name',
-                      message="What custom field would you like to add?",
-                      )
-    ]
+
+    # No custom fields in this version
+    """
+        custom_field_question = [
+            inquirer.Text('custom_field_name',
+                          message="What custom field would you like to add?",
+                          )
+        ]
+    """
 
     # Define the book as a dictionary, filling in its keys with values depending on what the user has decided
     # to specify with flags.
@@ -125,6 +128,7 @@ def add(
         book["tags"] = []
 
 
+    """
     if custom:
         custom_field_input = inquirer.prompt(custom_field_question)
         custom_field_value = [
@@ -132,6 +136,7 @@ def add(
                           message=f"What value should we add to the custom field {custom_field_input['custom_field_name']}?"
                           )
         ]
+    """
 
     # Convert the dictionary to JSON, load the JSON of the file holding the books, append this JSON to the other JSON,
     # and dump it all back into the file.
@@ -162,44 +167,6 @@ def add(
         print(f"{book['title']} added to the list.")
 
 @app.command()
-def attribute():
-    """
-    Add an author to a book.
-    """
-    # Get the title of the target book
-    title_question = [
-        inquirer.Text('title',
-                      message="What is the title of the book you want to change the author of?",
-                      )
-    ]
-
-    # Use fuzzy search to figure out which book the user is asking for, then tell them what we've found
-    # and ask them to choose the new state.
-    asked_title_question = inquirer.prompt(title_question)
-    target_book = asked_title_question["title"]
-
-    # Get the index of the target book
-    raw_json = h.read_file()
-    try:
-        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
-    except h.TitleNotFoundException:
-        print("There are no books with that title in your list.")
-        return
-
-    # Change the state of the target title to the target state
-    book = raw_json["book_list"][book_index]
-
-    attribute_question = [
-        inquirer.Text('attribute',
-                      message="What author do you want to add to this book?",
-                      )
-    ]
-
-    attribute_answer = inquirer.prompt(attribute_question)
-    book["author"] = attribute_answer["attribute"]
-    h.write_file(raw_json)
-
-@app.command()
 def remove():
     """
     Remove a book.
@@ -227,110 +194,6 @@ def remove():
             return
     raw_json["book_list"] = new_book_list
     h.write_file(raw_json)
-
-@app.command()
-def prioritize():
-    """
-    Change priority of a single book in the list.
-    """
-    # Get the index of the target book
-    title_question = [
-        inquirer.Text('title',
-                      message="Which book would you like to prioritize?",
-                      ),
-    ]
-
-    # Use fuzzy search to figure out which book the user is asking for, then tell them what we've
-    # found and ask them to choose the new state.
-    asked_title_question = inquirer.prompt(title_question)
-
-    # Get the index of the target book
-    raw_json = h.read_file()
-    try:
-        book_index = h.fuzzy_search_booklist(asked_title_question, raw_json["book_list"])
-    except h.TitleNotFoundException:
-        print("There are no books with that title in your list.")
-        return
-
-    # Change the state of the target title to the target state
-    book = raw_json["book_list"][book_index]
-
-    priority_question = [
-        inquirer.Text('priority',
-                      message=f"What priority would you like to set {book['title']} to?",
-                      validate=h.verify_priority, )
-    ]
-
-    asked_priority_question = inquirer.prompt(priority_question)
-    target_priority = asked_priority_question["priority"]
-
-    book["priority"] = target_priority
-
-    # Change the priority of the target title to the target priority
-    book = raw_json["book_list"][book_index]
-    book["priority"] = target_priority
-
-    h.write_file(raw_json)
-    return
-
-@app.command()
-def tag():
-    """
-    Tag a book that's already in the list. If that tag isn't in the tag catalog yet,
-    add it to the tag catalog.
-    """
-    title_question = [
-        inquirer.Text('title',
-                      message="Which book would you like to tag?",
-                      ),
-    ]
-
-    target_book = inquirer.prompt(title_question)["title"]
-
-    # Get the index of the book with the nearest title to the one we've typed in.
-    raw_json = h.read_file()
-    try:
-        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
-    except h.TitleNotFoundException:
-        print("There are no books with that title in your list.")
-        return
-
-    book = raw_json["book_list"][book_index]
-
-    # Ask the user how many tags they would like to add
-    tag_number_question = [
-        inquirer.Text(
-            'tag_num',
-            message=f"How many tags would you like to add to the closest title match, {book['title']}?",
-            validate= h.force_int
-        ),
-    ]
-    tag_number_input = inquirer.prompt(tag_number_question)
-
-
-    # Create a number of tag questions equal to the number of tags the user wants.
-    tag_questions = []
-    for i in range(int(tag_number_input["tag_num"])):
-        tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
-
-    # TPrompt the user
-    tag_answers = inquirer.prompt(tag_questions)
-
-    # Fill in the new tag list with the user's desired tags.
-    new_tag_list = [value for value in tag_answers.values()]
-    print("new_tag_list: ", new_tag_list)
-
-    # Add these tags to the book and to the tag catalog if they aren't already in the tag catalog
-    for new_tag in new_tag_list:
-        book["tags"].append(new_tag)
-        if not (new_tag in raw_json["tag_list"]):
-            raw_json["tag_list"].append(new_tag)
-
-    # Write and report to user.
-    h.write_file(raw_json)
-    print(f"Added the following tags to target book {book['title']}.")
-    for tag in new_tag_list:
-        print(tag)
 
 @app.command()
 def untag():
@@ -412,50 +275,119 @@ def skim():
         print(f"{pair[0]}: {pair[1]}")
 
 @app.command()
-def advance():
+def change(
+        author: bool = typer.Option(False, "--author", "-a", help="Specify the author of the book"),
+        state: bool = typer.Option(False, "--state", "-s", help="Specify what stage you are at in reading this book."),
+        priority: bool = typer.Option(False, "--priority", "-p",
+                                      help="Specify the priority of this book."),
+        tags: bool = typer.Option(False, "--tags", "-t",
+                                  help="Tag this book."),
+):
     """
-    Change book status.
+    Adds a tag, a priority, and/or a state to a book that is already in the list.
+    Which among them that this function adds depends on which ones the user specifies with the command flags, which are the same as in add.
+    If the book already has any of these things, the function tells this to the user and the user can modify them.
     """
-    # Key Error title
+    # The user needs to use this with at least one command flag.
+    if not (author | state | priority | tags):
+        explanation_string = """
+            Please specify which fields to add to the book with a flag on the change command, like this:
+            -a, --author --> Add an author
+            -s, --state --> Add a state
+            -p, --priority --> Add a priority
+            -t, --tags --> Add one or more tags
+        """
+        print(explanation_string)
+        quit()
+
+    # What book title does the book want to modify?
     title_question = [
         inquirer.Text('title',
-                      message="What is the title of the book you want to change the status of?",
+                      message="What book would you like to change?",
                       )
     ]
-    # Use fuzzy search to figure out which book the user is asking for, then tell them what we've found
-    # and ask them to choose the new state.
 
-    asked_title_question = inquirer.prompt(title_question)
-    target_book = asked_title_question["title"]
+    # Find the book in the list that most closely follows the title search and extract it from the JSON
+    title_answer = inquirer.prompt(title_question)
 
-    # Get the index of the target book
+    target_book_index = s.lookup(input_string=title_answer, helper=True)
+
     raw_json = h.read_file()
-    try:
-        book_index = h.fuzzy_search_booklist(target_book, raw_json["book_list"])
-        # Change the state of the target title to the target state
-        book = raw_json["book_list"][book_index]
-        print(f"The closest title match is {book['title']}")
-    except h.TitleNotFoundException:
-        print("There are no books with that title in your list.")
-        return
 
-    # Change the state of the target title to the target state
-    book = raw_json["book_list"][book_index]
+    book = raw_json["book_list"][target_book_index]
 
-    state_question = [
-        inquirer.List('state',
-                      message=f"Change {book['title']} to which target state?",
-                      choices=STATES,
-                      ),
-    ]
+    book_title = book["title"]
 
-    asked_state_question = inquirer.prompt(state_question)
-    target_state = asked_state_question["state"]
+    if(author==True):
+        # Inform the user about an author that already exists
+        if (book["author"]):
+            print(f"{book_title} already has the author {book['author']}")
 
-    book["state"] = target_state
-    raw_json["book_list"][book_index] = book
-    assert(type(raw_json) == dict)
+        author_question = [
+            inquirer.Text('author',
+                           message=f"What author should {book_title} have?")
+        ]
 
+        author_answer = inquirer.prompt(author_question)["author"]
+        book["author"] = author_answer
+
+    if(state==True):
+        # Inform the user about the state right now
+        try:
+            if (book["state"]):
+                print(f"{book_title} already has the state {book['state']}")
+        except:
+            # Do nothing-- if there was a KeyError then this field doesn't exist already and there's nothing to present to the user.
+            pass
+
+        state_question = [
+            inquirer.List('state',
+                          message=f"What state should {book_title} have?",
+                          choices=STATES
+                          )
+        ]
+        state_answer = inquirer.prompt(state_question)["state"]
+
+    if(priority==True):
+        # Inform the user about the priority right now
+        if (book["priority"]):
+            print(f"{book_title} already has the priority {book['priority']}")
+
+        priority_question = [
+            inquirer.Text('priority',
+                          message=f"What priority should {book_title} have?",
+                          validate=h.verify_priority
+                          )
+        ]
+        # NoneType objedt is not subscriptable
+        raw_priority_answer = inquirer.prompt(priority_question)["priority"]
+        book["priority"] = raw_priority_answer
+
+    if(tags==True):
+        # Inform the user about the tags right now
+        if (book["tags"]):
+            print(f"{book_title} already has the tags {book['tags']}")
+
+        tag_num_question = [
+            inquirer.Text('tag_num',
+                          message=f"How many tags would you like to add to {book_title}?",
+                          validate=h.force_int
+                          )
+        ]
+        tag_number_input = inquirer.prompt(tag_num_question)
+
+        tag_questions = []
+
+        for i in range(int(tag_number_input["tag_num"])):
+            tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
+
+        tag_answers = inquirer.prompt(tag_questions)
+        new_tag_list = [value for value in tag_answers.values()]
+        book["tags"].extend(new_tag_list)
+
+        # Add tags to tag list
+        raw_json["tag_list"].extend(new_tag_list)
+
+    # The list now contains the modified book.
+    raw_json["book_list"][target_book_index] = book
     h.write_file(raw_json)
-    print(f"Changed the status of {book['title']} to {target_state}")
-    return

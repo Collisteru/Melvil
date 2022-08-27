@@ -37,6 +37,7 @@ class bcolors:
 def init():
     """
     Initialize book list.
+    The user enters the location they would like their book list to have.
     """
 
     # We're going to save the custom location the user provides in a file named config.txt in the same folder
@@ -62,12 +63,12 @@ def init():
         location = os.getcwd() + "/" + DEFAULT_FILE_NAME
     else:
         # Else use the file name provided by the user. Either way, we initialize the file in the current working directory (TODO: we should refactor this to be more flexible).
-        location = os.getcwd() + "/" + answers["file_name"]
+        location = os.getcwd() + "/" + answers["file_name"].replace(" ", "_")
 
     # Write filename in a reference PATH the program will use each time to find the file it wants.
-    with open("../path.txt", 'w+') as path:
-        path.write(answers["file_name"].replace(" ", "_"))
-
+    with open("./path.txt", 'w+') as path:
+        print("Writing new path to path.txt")
+        path.write(location)
 
     # Initialize book dictionary
     initDict = {}
@@ -140,7 +141,7 @@ def transcribe(csv_flag=None):
         csv_reader = csv.reader(csv_file, delimiter=",")
         for row in csv_reader:
             print("row: ", row)
-            # Interestingly, teaking list slices lie this is safe, much like the .get() method.
+            # Interestingly, taking list slices like this is safe, like the .get() method.
             if (row[0:1] and row[1:2]):
                 book_catalog.append({"title": row[0], "author": row[1], "priority": 0, "tags": []})
             elif (row[0:1]):

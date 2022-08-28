@@ -69,15 +69,17 @@ def next(): # Type not supported: class 'list'.
 @app.command()
 def reading():
     """
-    Delivers the book you are reading now, defined as the book with the highest priority in the reading state.
+    Delivers the book you are reading now, defined as the book with the highest priority in the reading states.
     """
-
 
     raw_json = h.read_file()
 
     unordered_book_list = raw_json["book_list"]
 
-    ordered_book_list = sorted(unordered_book_list, key=lambda k: k['priority'])
+    for item in unordered_book_list:
+        print(item["priority"])
+    ordered_book_list = sorted(unordered_book_list, key=lambda k: int(k['priority']))
+
 
     # TODO: ^^' Could have just used flip for the above, hehehe.
     try:

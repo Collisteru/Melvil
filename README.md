@@ -39,7 +39,7 @@ There are many features that make your life easier:
 * `init` makes a new book list
 * `add` adds a new book
 * `remove` gets rid of a book
-* `flip` prints out all the books from greatest to least priority
+* `list` prints out all the books from greatest to least priority
 *  `change-status` modifies the status of a book
 * `skim` lists the attributes of a book
 * `prioritize` changes the priority of a book

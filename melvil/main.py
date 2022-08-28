@@ -10,7 +10,6 @@ DEFAULT_FILE_NAME = "melvil/melvil.json"
 
 import typer
 from datetime import date
-import pkgutil # Just for debugging purposes.
 
 TODAY = str(date.today())
 class bcolors:

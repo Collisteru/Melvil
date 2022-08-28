@@ -58,7 +58,6 @@ def add(
                       )
     ]
 
-
     # No custom fields in this version
     """
         custom_field_question = [
@@ -112,17 +111,13 @@ def add(
         tag_number_input = inquirer.prompt(tag_number_question)
         tag_questions = []
 
-        # Right now we have two problems: The loop loops doubly so that we have nine
-        # total iterations instead of three, and we get an error when we try to take
-        # tag_answers.values(). I think we can solve both of these on this very bus!
-
         # We know it's safe to convert the tag_num answer into an integer because force_int passed verification.
         for i in range(int(tag_number_input["tag_num"])):
             tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
 
         tag_answers = inquirer.prompt(tag_questions)
         new_tag_list = [value for value in tag_answers.values()]
-        book["tags"] = new_tag_list
+        book["tags"].extend(new_tag_list)
     else:
         new_tag_list = []
         book["tags"] = []
@@ -148,14 +143,15 @@ def add(
     old_book_list = old_data["book_list"]
     old_book_list.append(book)
 
-    # Add new tags to the taglist
-    old_tag_set = set(old_data["tag_list"])
-
-    new_tag_set = set(new_tag_list).union(old_tag_set)
+    # Add new tags to the taglist, making sure to avoid adding in duplicates
+    old_tag_list = old_data["tag_list"]
+    for new_tag in new_tag_list:
+        if not new_tag in old_tag_list:
+            old_tag_list.append(new_tag)
 
     # Update JSON data with new booklist and taglist
     old_data["book_list"] = old_book_list
-    old_data["tag_list"] = list(new_tag_set)
+    old_data["tag_list"] = list(new_tag_list)
 
     # Write old_data to file
     h.write_file(old_data)
@@ -276,6 +272,7 @@ def skim():
 
 @app.command()
 def change(
+        title: bool = typer.Option(False, "--title", "-i"),
         author: bool = typer.Option(False, "--author", "-a", help="Specify the author of the book"),
         state: bool = typer.Option(False, "--state", "-s", help="Specify what stage you are at in reading this book."),
         priority: bool = typer.Option(False, "--priority", "-p",
@@ -289,7 +286,7 @@ def change(
     If the book already has any of these things, the function tells this to the user and the user can modify them.
     """
     # The user needs to use this with at least one command flag.
-    if not (author | state | priority | tags):
+    if not (title | author | state | priority | tags):
         explanation_string = """
             Please specify which fields to add to the book with a flag on the change command, like this:
             -a, --author --> Add an author
@@ -317,6 +314,19 @@ def change(
     book = raw_json["book_list"][target_book_index]
 
     book_title = book["title"]
+
+    if(title==True):
+        # Every book has a title, so we don't have to check for it.
+
+        title_change_question = [
+            inquirer.Text('title',
+                          message=f"What title to change to from {book_title}?")
+        ]
+
+        title_answer = inquirer.prompt(title_change_question)["title"]
+        book["title"] = title_answer
+        print(f"Title changed to {title_answer}")
+
 
     if(author==True):
         # Inform the user about an author that already exists
@@ -359,7 +369,8 @@ def change(
                           validate=h.verify_priority
                           )
         ]
-        # NoneType objedt is not subscriptable
+
+        # NoneType object cannot be subscripted
         raw_priority_answer = inquirer.prompt(priority_question)["priority"]
         book["priority"] = raw_priority_answer
 
@@ -386,7 +397,11 @@ def change(
         book["tags"].extend(new_tag_list)
 
         # Add tags to tag list
-        raw_json["tag_list"].extend(new_tag_list)
+
+        old_tag_list = raw_json["tag_list"]
+        for new_tag in new_tag_list:
+            if not (new_tag in old_tag_list):
+                old_tag_list.append(new_tag)
 
     # The list now contains the modified book.
     raw_json["book_list"][target_book_index] = book

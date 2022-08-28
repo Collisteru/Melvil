@@ -21,15 +21,6 @@ sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 import inquirer
 from app import app # Type not yet supported: class 'list'
 
-
-# Create a function that delivers the book you're currently reading. This is just the highest-priority book with the to-read ## tag.
-
-# Create a function that delivers the book you want to read next. This is the highest-priority book with the "to-read" tag.
-# Imports all the websites of a given subdomain. This is good
-## for looking up blog catalogs. You'll want to try this with WordPress blogs, LessWrong, other website, etc.
-## Basically, try it with all the websites you've posted on your own website.
-# Import all the articles from that subdomain.
-
 # Going to try this one:
 # https://python.plainenglish.io/scraping-the-subpages-on-a-website-ea2d4e3db113
 
@@ -39,11 +30,7 @@ from tqdm import tqdm
 import json
 
 
-
-
-
 # TODO: WRITE AND TEST SUBPROCESS CALL WHEN YOU HAVE ACCESS TO THE INTERNET AGAIN.
-
 @app.command() # Type not supported goes somewhere in here.
 def next(): # Type not supported: class 'list'.
     """

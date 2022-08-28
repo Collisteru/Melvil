@@ -30,14 +30,14 @@ from tqdm import tqdm
 import json
 
 
-# TODO: WRITE AND TEST SUBPROCESS CALL WHEN YOU HAVE ACCESS TO THE INTERNET AGAIN.
+# If there are no books in the list with this state, then the function just delivers the highest-priority book
+# in the index, with a book with undefined priority ranking last. If all books have no priority and are not to-read,
+# this function just delivers the first book in an alphabetical sequence.
 @app.command() # Type not supported goes somewhere in here.
 def next(): # Type not supported: class 'list'.
     """
+
     Delivers the book you want to read next, defines the book with the highest priority and the "to-read" state.
-    If there are no books in the list with this state, then the function just delivers the highest-priority book
-    in the index, with a book with undefined priority ranking last. If all books have no priority and are not to-read, this function
-    just delivers the first book in an alphabetical sequence.
     """
 
     # Commence fuzzy search.
@@ -48,7 +48,7 @@ def next(): # Type not supported: class 'list'.
 
     unordered_book_list = raw_json["book_list"]
 
-    ordered_book_list = sorted(unordered_book_list, key=lambda k: k['priority'])
+    ordered_book_list = sorted(unordered_book_list, key=lambda k: int(k['priority']))
 
     try:
         general_first = ordered_book_list[0]
@@ -62,9 +62,9 @@ def next(): # Type not supported: class 'list'.
             print(f"Found a book to read: {book['title']}")
             return
 
-        print(f"Found a book to read: {book['title']}")
-    # If none of the books in the list have the to_read state, we must deliver general_first.
-    # Otherwise, we must deliver the highest priority book with  the to read state.
+
+    # If none of the books have the to-read state, state this frankly.
+    print(f"You haven't designated any books as 'to-read', but the work with the highest priority overall is \x1B[3m{general_first['title']}\x1B[0m")
 
 @app.command()
 def reading():
@@ -76,8 +76,6 @@ def reading():
 
     unordered_book_list = raw_json["book_list"]
 
-    for item in unordered_book_list:
-        print(item["priority"])
     ordered_book_list = sorted(unordered_book_list, key=lambda k: int(k['priority']))
 
 
@@ -93,7 +91,7 @@ def reading():
             if book['state'] == "To Read":
                 print(f"Found the book you're currently reading: {book['title']}")
                 return
-        print("You're not currently reading anything. Try adding a book with 'add', or finding a book to read with 'next'.")
+        print("You aren't reading anything right now. Try adding a book with 'add' or finding a book to read with 'next'.")
     except:
         print("No books are in the booklist. Try adding a book with 'add'.")
         return

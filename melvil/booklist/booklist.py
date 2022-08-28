@@ -154,7 +154,7 @@ def transcribe(csv_flag=None):
 
 @app.command()
 # TODO: Add flag to show priority too.
-def flip(helper: bool=False):
+def list(helper: bool=False):
     """
     Prints list contents in order of decreasing priority.
     """
@@ -168,11 +168,11 @@ def flip(helper: bool=False):
     if not helper:
         for book in new_list:
             if book["author"]:
-                print(book["title"] + " by " + book["author"])
+                print("\x1B[3m" + book["title"] + "\x1B[0m" + " by " + book["author"])
             else:
-                print(book["title"])
+                print("\x1B[3m" + book["title"] + "\x1B[0m")
 
-    return new_list # Can we use this as a helper for other commands?
+    return new_list # Can we use this as a helper for other commands
 
 @app.command()
 def classify(helper: bool=False):

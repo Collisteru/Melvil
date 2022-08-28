@@ -27,7 +27,7 @@ def add(
         tags: bool = typer.Option(False, "--tags", "-t", help="Specify whether you would like to add tags to this book now."),
 ):
     """
-    Add a book.
+    Add a book. Use 'add --help' for more info.
     """
 
     # Capture info about the new book
@@ -304,9 +304,7 @@ def change(
                                   help="Tag this book."),
 ):
     """
-    Adds a tag, a priority, and/or a state to a book that is already in the list.
-    Which among them that this function adds depends on which ones the user specifies with the command flags, which are the same as in add.
-    If the book already has any of these things, the function tells this to the user and the user can modify them.
+    Change one or more of a book's attributes. Use 'change --help' for more.
     """
     # The user needs to use this with at least one command flag.
     if not (title | author | state | priority | tags):

@@ -8,7 +8,7 @@ python main.py --help
 python main.py init
 python main.py delete
 python main.py transcribe
-python main.py flip
+python main.py list
 python main.py classify
 python main.py count
 

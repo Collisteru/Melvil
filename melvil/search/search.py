@@ -21,9 +21,7 @@ import typer
 @app.command()
 def lookup(input_string="", helper=False):
     """
-    This function has two versions: one is used when you want to use it as a helper function to another function, the other one is used when you want a function to be called directly by the user.
-    When helper is true, it searches the list for the book that most closely matches input_string and returns the index of that title in the book list.
-    When helper is false, it generates a list of the top few titles that most closely match the desired category and pipes that list to the stdout for the user's convenience.
+    Search by title.
     """
 
     raw_json = h.read_file()

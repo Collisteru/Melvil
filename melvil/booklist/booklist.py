@@ -156,21 +156,20 @@ def transcribe(csv_flag=None):
 # TODO: Add flag to show priority too.
 def list(helper: bool=False):
     """
-    Prints list contents in order of decreasing priority.
+    Prints list contents in order of greatest-to-least priority.
     """
     raw_json = h.read_file()
 
     book_list = raw_json["book_list"]
     new_list = sorted(book_list, key=lambda d: int(d['priority']), reverse=True)
 
-    # Sometimes, we want to use this function internally to get a title catalog.
-    # In these cases, we don't want to print the list to the user.
+    data_table = []
     if not helper:
         for book in new_list:
-            if book["author"]:
-                print("\x1B[3m" + book["title"] + "\x1B[0m" + " by " + book["author"])
-            else:
-                print("\x1B[3m" + book["title"] + "\x1B[0m")
+            data_table.append(["\x1B[3m" + book["title"] + "\x1B[0m", "Author: " + book["author"], "Priority: " + book["priority"], "State: " + book["state"]])
+        for row in data_table:
+            print("{: <50} {: <50} {: <50} {: <50}".format(*row))
+
 
     return new_list # Can we use this as a helper for other commands
 

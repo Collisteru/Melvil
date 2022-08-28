@@ -143,9 +143,9 @@ def transcribe(csv_flag=None):
             print("row: ", row)
             # Interestingly, taking list slices like this is safe, like the .get() method.
             if (row[0:1] and row[1:2]):
-                book_catalog.append({"title": row[0], "author": row[1], "priority": 0, "tags": []})
+                book_catalog.append({"title": row[0], "author": row[1], "priority": 0, "state": "Unknown", "tags": []})
             elif (row[0:1]):
-                book_catalog.append({"title": row[0], "author": "", "priority": 0, "tags": []})
+                book_catalog.append({"title": row[0], "author": "", "priority": 0, "state": "Unknown", "tags": []})
             else:
                 # Empty row...?
                 pass

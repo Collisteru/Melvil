@@ -117,10 +117,18 @@ def add(
 
         tag_answers = inquirer.prompt(tag_questions)
         new_tag_list = [value for value in tag_answers.values()]
-        book["tags"].extend(new_tag_list)
+
+        # Extend the book's own list of tags with this new taglist
+        try:
+            for new_tag in new_tag_list:
+                if not new_tag in book["tags"]:
+                    book["tags"].append(new_tag)
+        except: # Triggers in the case that book was never initialized with a tag list
+            book["tags"] = new_tag_list
+
     else:
         new_tag_list = []
-        book["tags"] = []
+        book["tag_list"] = []
 
 
     """
@@ -151,7 +159,7 @@ def add(
 
     # Update JSON data with new booklist and taglist
     old_data["book_list"] = old_book_list
-    old_data["tag_list"] = list(new_tag_list)
+    old_data["tag_list"] = list(old_tag_list)
 
     # Write old_data to file
     h.write_file(old_data)
@@ -161,6 +169,9 @@ def add(
         print(f"{book['title']} by {book['author']} added to the list.")
     else:
         print(f"{book['title']} added to the list.")
+
+
+
 
 @app.command()
 def remove():
@@ -236,6 +247,18 @@ def untag():
         if tag.strip() == target_tag:
             target_book["tags"].remove(target_tag)
             new_taglist = target_book["tags"]
+
+            # Make sure to remove this tag from the JSON taglist as well
+            old_master_taglist = raw_json["tag_list"]
+            try:
+                raw_json["tag_list"].remove(target_tag)
+            except:
+                print("This tag wasn't found in the master taglist, so there's probably a bug either in add or transcribe.")
+                pass
+
+
+
+            # Write the new json to the file
             raw_json["book_list"][book_index]["tags"] = new_taglist
             h.write_file(raw_json)
             print(f"Removed tag {target_tag} from {target_book['title']}")

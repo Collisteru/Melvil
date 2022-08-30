@@ -378,6 +378,7 @@ def change(
                           )
         ]
         state_answer = inquirer.prompt(state_question)["state"]
+        book["state"] = state_answer
 
     if(priority==True):
         # Inform the user about the priority right now

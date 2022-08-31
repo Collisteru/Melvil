@@ -6,6 +6,8 @@
 # Once again though, that would be hard to implement. Keep it simple, we're not geniuses, here.
 
 # Okay, here's what we're going to do:
+from melvil import melvil as mv
+app = mv.app
 from helper import helper as h
 import os
 import inspect
@@ -19,7 +21,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
 import inquirer
-from app import app # Type not yet supported: class 'list'
+from melvil.melvil import * # Type not yet supported: class 'list'
 
 # Going to try this one:
 # https://python.plainenglish.io/scraping-the-subpages-on-a-website-ea2d4e3db113

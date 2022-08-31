@@ -1,5 +1,7 @@
 # This file focuses on commands that affect the entire booklist.
 
+from melvil import melvil as mv
+app = mv.app
 import inquirer
 import os
 import json
@@ -16,7 +18,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
-from app import app
+from melvil.melvil import *
 from datetime import date
 
 

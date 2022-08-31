@@ -15,7 +15,6 @@ sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
 
 
-from app import app
 # TODO: It may actually be possible to solve the interruption problem by adding a custom verify function that checks if the input contains a newline character or an interrupt character or another
 # special character and nothing else.
 

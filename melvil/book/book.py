@@ -11,7 +11,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
-from melvil.melvil import *
+from main import app
 
 STATES = ["Unknown", "To Read", "Reading", "Read", "Reviewed"]
 

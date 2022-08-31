@@ -10,8 +10,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
-from melvil import melvil as mv
-app = mv.app
+from main import app
 from helper import helper as h
 
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil/")

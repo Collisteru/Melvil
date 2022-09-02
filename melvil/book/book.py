@@ -121,10 +121,10 @@ def add(
         # Extend the book's own list of tags with this new taglist
         try:
             for new_tag in new_tag_list:
-                if not new_tag in book["tags"]:
-                    book["tags"].append(new_tag)
+                if not new_tag in book["tag_list"]:
+                    book["tag_list"].append(new_tag)
         except: # Triggers in the case that book was never initialized with a tag list
-            book["tags"] = new_tag_list
+            book["tag_list"] = new_tag_list
 
     else:
         new_tag_list = []
@@ -224,12 +224,12 @@ def untag():
     target_book = raw_json["book_list"][book_index]
 
     # List tags the book already has for the user's convenience
-    if target_book["tags"] == []:
+    if target_book["tag_list"] == []:
         print(f"{target_book['title']} doesn't have any tags to remove, silly!")
         return
     else:
         print(f"The following tags are in the closest match {target_book['title']}")
-        for tag in target_book["tags"]:
+        for tag in target_book["tag_list"]:
             print(tag)
 
     tag_question = [
@@ -243,10 +243,10 @@ def untag():
 
     # We have the target tag and the target book.
     # Now, search the booklist for
-    for tag in target_book["tags"]:
+    for tag in target_book["tag_list"]:
         if tag.strip() == target_tag:
-            target_book["tags"].remove(target_tag)
-            new_taglist = target_book["tags"]
+            target_book["tag_list"].remove(target_tag)
+            new_taglist = target_book["tag_list"]
 
             # Make sure to remove this tag from the JSON taglist as well
             old_master_taglist = raw_json["tag_list"]
@@ -398,8 +398,8 @@ def change(
 
     if(tags==True):
         # Inform the user about the tags right now
-        if (book["tags"]):
-            print(f"{book_title} already has the tags {book['tags']}")
+        if (book["tag_list"]):
+            print(f"{book_title} already has the tags {book['tag_list']}")
 
         tag_num_question = [
             inquirer.Text('tag_num',
@@ -416,7 +416,7 @@ def change(
 
         tag_answers = inquirer.prompt(tag_questions)
         new_tag_list = [value for value in tag_answers.values()]
-        book["tags"].extend(new_tag_list)
+        book["tag_list"].extend(new_tag_list)
 
         # Add tags to tag list
 

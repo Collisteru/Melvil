@@ -73,7 +73,7 @@ def compile():
     books_with_target_tag = []
     for book in book_catalog:
         try:
-            if target_tag in book["tags"]:
+            if target_tag in book["tag_list"]:
                 books_with_target_tag.append(book["title"])
         except:
             # This book has no tags. Nothing to worry about.

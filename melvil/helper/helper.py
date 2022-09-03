@@ -1,4 +1,5 @@
 import json
+from Levenshtein import *
 from collections import OrderedDict
 from thefuzz import fuzz
 from thefuzz import process
@@ -161,3 +162,30 @@ def safe_prompt(question):
         else:
             return answer
 
+def substring_similarity(string1, string2):
+    """
+    We assume that string1 is the shorter string and define the similarity of the two
+    as the closest similarity of string1 and any of the substrings of string2.
+    If string1 is longer than string2, we just compute the similarity of string1 and string2
+    """
+
+    if (len(string1) >= len(string2)):
+        return distance(string1, string2)
+    else:
+        # Generate substrings of string1
+        distances = []
+        substrings = [string2[i:j] for i in range(len(string2)) for j in range(i+1, len(string2)+1)]
+        for substring in substrings:
+            distances.append(distance(string1, substring))
+        return min(distances)
+
+def superstring_finder(substring: str, superstrings: list):
+    """
+    Finds the string that the given search query is most likely a substring of.
+    Returns a dictionary between items in the list and the minimum Levenshtein distance among their substrings.
+    """
+    results_dict = {}
+    for superstring in superstrings:
+        results_dict[superstring] = substring_similarity(substring, superstring)
+    sorted_results_dict = {k: v for k, v in sorted(results_dict.items(), key=lambda item: item[1])}
+    return sorted_results_dict

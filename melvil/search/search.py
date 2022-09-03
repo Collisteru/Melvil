@@ -5,6 +5,7 @@ STATES = ["Unknown", "To Read", "Reading", "Read", "Reviewed"]
 import os
 import sys
 import inspect
+import regex
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -15,7 +16,6 @@ from helper import helper as h
 
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil/")
 import typer
-
 
 # TODO: Possibly make this a scrollable list of the list ordered by reverse Levenshtein distance. Until then, keep the fraction of books listed high.
 @app.command()
@@ -46,51 +46,31 @@ def lookup(input_string="", helper=False):
 
         title_catalog = [book["title"] for book in book_catalog]
 
-        num_results = max(1, round(h.SEARCH_FRACTION*len(book_catalog)))
+        num_results = min(10, round(h.SEARCH_FRACTION*len(book_catalog)))
 
-        # This only lists titles with a certain maximum fuzzy distance ratio between themselves and the target query.
-        # It says different things depending on whether there is only one result or many.
-        if (h.fuzz.ratio(search_query, title_catalog[0]) < FUZZY_RATIO_THRESHOLD):
-            print("There aren't any titles that closely match your query. Use the 'list' command to see all titles.")
-            return
-        else:
-            if num_results == 1:
-                print(f"This title most closely matches your query:")
-                print(title_catalog[0])
-            else:
-                for result in range(num_results):
-                    top_result_index = int(h.fuzzy_search_booklist(search_query, book_catalog))
-                    top_result = title_catalog[top_result_index]
-                    if (h.fuzz.ratio(top_result, search_query) < FUZZY_RATIO_THRESHOLD):
-                        return
-                    else:
-                        print(top_result)
-                        book_catalog.pop(top_result_index)
+        titles_ordered_by_distance = h.superstring_finder(search_query, title_catalog)
+
+        print(f"Top {num_results} results:")
+        for i in range(num_results):
+            print(f"{list(titles_ordered_by_distance.keys())[i]}")
 
 @app.command()
 def compile():
     """
     Search by tag
     """
-    search_query = input("Which tag would you like to search for? ")
+    search_query = typer.prompt("Which tag would you like to search by?")
 
     raw_json = h.read_file()
     book_catalog = raw_json["book_list"]
 
     # Get tag catalog
     tag_catalog = raw_json["tag_list"]
-    tag_to_levenshtein = {tag: h.fuzz.ratio(search_query, tag) for tag in tag_catalog}
-    sorted_tag_to_catalog = {k: v for k, v in sorted(tag_to_levenshtein.items(), key=lambda item: item[1])}
 
-    target_tag = sorted_tag_to_catalog.popitem()[0]
+    list_target_tags = h.superstring_finder(search_query, tag_catalog)
 
-    # Fuzzy Distance Limit
-    print(f"search_query: {search_query}")
-    print(f"target_tag: {target_tag}")
-    if (h.fuzz.ratio(search_query, target_tag) < FUZZY_RATIO_THRESHOLD):
-
-        print("There aren't any tags that closely match your query. Use the 'classify' command to see a list of all available tags.")
-        return
+    target_tag = list(list_target_tags.keys())[0]
+    print(f"Choosing target tag {target_tag}")
 
     books_with_target_tag = []
     for book in book_catalog:
@@ -104,3 +84,6 @@ def compile():
     print(f"The following books have the tag {target_tag}: ")
     for book in books_with_target_tag:
         print(book)
+
+
+

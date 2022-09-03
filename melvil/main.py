@@ -10,7 +10,9 @@ FUZZY_RATIO_THRESHOLD = 75 # We shouldn't count fuzzy ratios that are higher tha
 # Note that this includes all the information Melvil needs to find the proper file to edit:
 
 import typer
+import inquirer
 from datetime import date
+
 
 TODAY = str(date.today())
 class bcolors:
@@ -25,6 +27,11 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 app = typer.Typer()
+
+# Import Standard Modules
+
+import sys
+
 
 # Import submodules
 from booklist.booklist import *
@@ -43,6 +50,9 @@ def callback():
     Melvil, the command-line book management tool.
     """
     pass
+
+
+
 
 # App is only invoked when we run main.py directly, but not when we import it.
 if __name__ == "__main__":

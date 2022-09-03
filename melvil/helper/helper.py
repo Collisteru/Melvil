@@ -149,3 +149,15 @@ def force_int(answers, current):
     except:
         raise inquirer.errors.ValidationError('', reason='Please enter an integer.')
     return True
+
+def safe_prompt(question):
+    """
+    Call to inquirer that safely handles empty input.
+    """
+    while True:
+        answer = inquirer.prompt(question)
+        if (list(answer.values())[0] == ""):
+            print("Empty answer. Try again.")
+        else:
+            return answer
+

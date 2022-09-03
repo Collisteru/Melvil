@@ -37,7 +37,11 @@ def lookup(input_string="", helper=False):
                           message="Which book would you like to look up?",
                           ),
         ]
-        answers = inquirer.prompt(question)
+        try:
+            answers = h.safe_prompt(question)
+        except:
+            print("Empty input. Exiting.")
+            quit()
         search_query = answers["title"]
 
         title_catalog = [book["title"] for book in book_catalog]
@@ -62,10 +66,6 @@ def lookup(input_string="", helper=False):
                     else:
                         print(top_result)
                         book_catalog.pop(top_result_index)
-
-
-
-
 
 @app.command()
 def compile():

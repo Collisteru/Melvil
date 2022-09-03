@@ -56,7 +56,7 @@ def init():
     questions = [
         inquirer.Text('file_name', message="Please enter the file you would like to designate as the storage file for your books.", validate=file_validation)
     ]
-    answers = inquirer.prompt(questions)
+    answers = h.safe_prompt(questions)
 
     # If no file name is provided, use the current working directory
     if answers["file_name"] == "":
@@ -99,7 +99,11 @@ def delete():
     ]
 
     # List index out of range. But why?
-    to_exterminate = inquirer.prompt(question)["confirmation"]
+    try:
+        to_exterminate = h.safe_prompt(question)["confirmation"]
+    except:
+        print("Empty input. Exiting.")
+        exit()
 
     if to_exterminate == "Yes":
         raw_json["book_list"] = []
@@ -130,7 +134,7 @@ def transcribe(csv_flag=None):
                       )
     ]
 
-    transcription_answer = inquirer.prompt(transcription_question)["file_to_transcribe"]
+    transcription_answer = h.safe_prompt(transcription_question)["file_to_transcribe"]
 
     raw_json = h.read_file()
     book_catalog = raw_json["book_list"]

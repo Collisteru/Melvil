@@ -58,15 +58,6 @@ def add(
                       )
     ]
 
-    # No custom fields in this version
-    """
-        custom_field_question = [
-            inquirer.Text('custom_field_name',
-                          message="What custom field would you like to add?",
-                          )
-        ]
-    """
-
     # Define the book as a dictionary, filling in its keys with values depending on what the user has decided
     # to specify with flags.
     book = {}
@@ -78,44 +69,39 @@ def add(
                       )
     ]
 
-    title_answer = inquirer.prompt(title_question)
-
-    try:
-        book['title'] = title_answer['title']
-    except:
-        print("Empty title, aborting.")
-        sys.exit(0)
+    title_answer = h.safe_prompt(title_question)
+    book['title'] = title_answer['title']
 
     # Define author, conditional on flag
     if author:
-        author_input = inquirer.prompt(author_question)
+        author_input = h.safe_prompt(author_question)
         book["author"] = author_input["book_author"]
     else:
         book["author"] = ""
 
     # Define state, conditional on flag
     if state:
-        state_input = inquirer.prompt(state_question)
+        state_input = h.safe_prompt(state_question)
         book["state"] = state_input["state"]
     else:
         book["state"] = "Unknown"
 
     # Define priority, conditional on flag
     if priority:
-        priority_input = inquirer.prompt(priority_question)
+        priority_input = h.safe_prompt(priority_question)
         book["priority"] = priority_input["priority"]
     else:
         book["priority"] = "0" # Default to zero priority
 
     if tags:
-        tag_number_input = inquirer.prompt(tag_number_question)
+        tag_number_input = h.safe_prompt(tag_number_question)
         tag_questions = []
 
         # We know it's safe to convert the tag_num answer into an integer because force_int passed verification.
         for i in range(int(tag_number_input["tag_num"])):
             tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
 
-        tag_answers = inquirer.prompt(tag_questions)
+        tag_answers = h.safe_prompt(tag_questions)
         new_tag_list = [value for value in tag_answers.values()]
 
         # Extend the book's own list of tags with this new taglist
@@ -133,7 +119,7 @@ def add(
 
     """
     if custom:
-        custom_field_input = inquirer.prompt(custom_field_question)
+        custom_field_input = h.safe_prompt(custom_field_question)
         custom_field_value = [
             inquirer.Text('custom_field_value',
                           message=f"What value should we add to the custom field {custom_field_input['custom_field_name']}?"
@@ -183,7 +169,7 @@ def remove():
                       message="What is the title of the book you want to remove?",
                       ),
     ]
-    answers = inquirer.prompt(question)
+    answers = h.safe_prompt(question)
     input_title = answers["title"]
     raw_json = h.read_file()
 
@@ -213,7 +199,7 @@ def untag():
                       ),
     ]
 
-    title_answer = inquirer.prompt(title_question)["title"]
+    title_answer = h.safe_prompt(title_question)["title"]
     raw_json = h.read_file()
 
     try:
@@ -238,7 +224,7 @@ def untag():
                       ),
     ]
 
-    tag_answer = inquirer.prompt(tag_question)
+    tag_answer = h.safe_prompt(tag_question)
     target_tag = tag_answer["tag"]
 
     # We have the target tag and the target book.
@@ -275,7 +261,7 @@ def skim():
                       message="Which book would you like to skim?",
                       ),
     ]
-    answers = inquirer.prompt(question)
+    answers = h.safe_prompt(question)
     target_book = answers["title"]
     raw_json = h.read_file()
 
@@ -326,7 +312,7 @@ def change(
     ]
 
     # Find the book in the list that most closely follows the title search and extract it from the JSON
-    title_answer = inquirer.prompt(title_question)
+    title_answer = h.safe_prompt(title_question)
 
     target_book_index = s.lookup(input_string=title_answer, helper=True)
 
@@ -344,7 +330,7 @@ def change(
                           message=f"What title to change to from {book_title}?")
         ]
 
-        title_answer = inquirer.prompt(title_change_question)["title"]
+        title_answer = h.safe_prompt(title_change_question)["title"]
         book["title"] = title_answer
         print(f"Title changed to {title_answer}")
 
@@ -359,7 +345,7 @@ def change(
                            message=f"What author should {book_title} have?")
         ]
 
-        author_answer = inquirer.prompt(author_question)["author"]
+        author_answer = h.safe_prompt(author_question)["author"]
         book["author"] = author_answer
 
     if(state==True):
@@ -377,7 +363,7 @@ def change(
                           choices=STATES
                           )
         ]
-        state_answer = inquirer.prompt(state_question)["state"]
+        state_answer = h.safe_prompt(state_question)["state"]
         book["state"] = state_answer
 
     if(priority==True):
@@ -393,7 +379,7 @@ def change(
         ]
 
         # NoneType object cannot be subscripted
-        raw_priority_answer = inquirer.prompt(priority_question)["priority"]
+        raw_priority_answer = h.safe_prompt(priority_question)["priority"]
         book["priority"] = raw_priority_answer
 
     if(tags==True):
@@ -407,14 +393,14 @@ def change(
                           validate=h.force_int
                           )
         ]
-        tag_number_input = inquirer.prompt(tag_num_question)
+        tag_number_input = h.safe_prompt(tag_num_question)
 
         tag_questions = []
 
         for i in range(int(tag_number_input["tag_num"])):
             tag_questions.append(inquirer.Text(f'tag_{i}', message=f"Tag #{i + 1}?"))
 
-        tag_answers = inquirer.prompt(tag_questions)
+        tag_answers = h.safe_prompt(tag_questions)
         new_tag_list = [value for value in tag_answers.values()]
         book["tag_list"].extend(new_tag_list)
 

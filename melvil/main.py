@@ -2,6 +2,7 @@ VERSION = "1.0.0"
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 STATES = ["Unknown", "To Read", "Reading", "Read", "Reviewed"]
 DEFAULT_FILE_NAME = "melvil/melvil.json"
+FUZZY_RATIO_THRESHOLD = 75 # We shouldn't count fuzzy ratios that are higher than this.
 
 # Root file for major dependencies and data.
 # Melvil only keeps track of one booklist at a time, but this booklist can be saved anywhere the user wants to save
@@ -46,12 +47,3 @@ def callback():
 # App is only invoked when we run main.py directly, but not when we import it.
 if __name__ == "__main__":
       app()
-
-
-
-
-
-
-
-
-

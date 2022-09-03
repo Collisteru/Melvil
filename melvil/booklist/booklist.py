@@ -143,9 +143,9 @@ def transcribe(csv_flag=None):
             print("row: ", row)
             # Interestingly, taking list slices like this is safe, like the .get() method.
             if (row[0:1] and row[1:2]):
-                book_catalog.append({"title": row[0], "author": row[1], "priority": 0, "state": "Unknown", "tags": []})
+                book_catalog.append({"title": row[0], "author": row[1], "priority": 0, "state": "Unknown", "tag_list": []})
             elif (row[0:1]):
-                book_catalog.append({"title": row[0], "author": "", "priority": 0, "state": "Unknown", "tags": []})
+                book_catalog.append({"title": row[0], "author": "", "priority": 0, "state": "Unknown", "tag_list": []})
             else:
                 # Empty row...?
                 pass
@@ -166,7 +166,7 @@ def list(helper: bool=False):
     data_table = []
     if not helper:
         for book in new_list:
-            data_table.append(["\x1B[3m" + book["title"] + "\x1B[0m", "Author: " + book["author"], "Priority: " + book["priority"], "State: " + book["state"]])
+            data_table.append(["\x1B[3m" + book["title"] + "\x1B[0m", "Author: " + book["author"], "Priority: " + str(book["priority"]), "State: " + book["state"]])
         for row in data_table:
             print("{: <50} {: <50} {: <50} {: <50}".format(*row))
 

@@ -259,7 +259,7 @@ def untag():
 
 
             # Write the new json to the file
-            raw_json["book_list"][book_index]["tags"] = new_taglist
+            raw_json["book_list"][book_index]["tag_list"] = new_taglist
             h.write_file(raw_json)
             print(f"Removed tag {target_tag} from {target_book['title']}")
             return

@@ -11,7 +11,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
-from main import app
+from main import app, safe_prompt
 
 STATES = ["Unknown", "To Read", "Reading", "Read", "Reviewed"]
 
@@ -69,12 +69,17 @@ def add(
                       )
     ]
 
-    title_answer = h.safe_prompt(title_question)
+
+    title_answer = safe_prompt(title_question)
+
     book['title'] = title_answer['title']
 
     # Define author, conditional on flag
     if author:
-        author_input = h.safe_prompt(author_question)
+        @safe_prompt
+        def ask_author_question:
+            return h.safe_prompt(author_question)
+        author_input = ask_author_question()
         book["author"] = author_input["book_author"]
     else:
         book["author"] = ""
@@ -290,7 +295,7 @@ def change(
                                   help="Tag this book."),
 ):
     """
-    Change one or more of a book's attributes. Use 'change --help' for more.
+    Change one or more of a book's attributes. Use 'change --help' for more info.
     """
     # The user needs to use this with at least one command flag.
     if not (title | author | state | priority | tags):
@@ -385,7 +390,7 @@ def change(
     if(tags==True):
         # Inform the user about the tags right now
         if (book["tag_list"]):
-            print(f"{book_title} already has the tags {book['tag_list']}")
+            print(f"{book_title} already has the tags {book['tags']}")
 
         tag_num_question = [
             inquirer.Text('tag_num',

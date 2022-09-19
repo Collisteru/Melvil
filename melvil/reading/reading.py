@@ -36,8 +36,7 @@ import json
 @app.command() # Type not supported goes somewhere in here.
 def next(): # Type not supported: class 'list'.
     """
-
-    Delivers the book you want to read next, defines the book with the highest priority and the "to-read" state.
+    Delivers the book you want to read next, defined the book with the highest priority and the "to-read" state.
     """
 
     # Commence fuzzy search.

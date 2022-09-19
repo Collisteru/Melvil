@@ -1,11 +1,10 @@
 import json
-from Levenshtein import *
+from Levenshtein import distance
 from collections import OrderedDict
 from thefuzz import fuzz
-from thefuzz import process
 import inquirer
 
-# Import app from parent directory. This requires a bit of a python path hack.
+# Import appFile from parent directory. This requires a bit of a python path hack.
 import os
 import sys
 import inspect

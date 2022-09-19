@@ -5,20 +5,21 @@ import inquirer
 import os
 import json
 import csv
-
-from helper import helper as h
-
-# Import app from parent directory. This requires a bit of a python path hack.
 import os
 import sys
 import inspect
+
+
+from helper import helper as h
+
+from main import app
+
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
 from datetime import date
-
 
 TODAY = str(date.today())
 DEFAULT_FILE_NAME= "melvil.json"
@@ -37,7 +38,7 @@ class bcolors:
 def init():
     """
     Initialize book list.
-    The user enters the location they would like their book list to have.
+    The user enters the name of the booklist and Melvil sets the booklist path to a JSON file of that name in the current working directory.
     """
 
     # We're going to save the custom location the user provides in a file named config.txt in the same folder
@@ -54,7 +55,7 @@ def init():
 
     # Inquire as to the desired location
     questions = [
-        inquirer.Text('file_name', message="Please enter the file you would like to designate as the storage file for your books.", validate=file_validation)
+        inquirer.Text('file_name', message="Enter a file name. Melvil will initialize use as your booklist a file with that name in the current directory. .", validate=file_validation)
     ]
     answers = h.safe_prompt(questions)
 
@@ -79,13 +80,13 @@ def init():
     json_string = json.dumps(initDict, indent=4)
     os.makedirs(os.path.dirname(location), exist_ok=True)
     with open(location, "w+") as file:
-        print(f"New JSON file initialized at {location}")
+        print("New JSON file initialized at " + location)
         file.write(json_string)
 
 @app.command()
 def delete():
     """
-    Delete all the books in the list. Not to be used lightly!
+    Deletes your current booklist. Not to be used lightly!
     """
     OPTIONS = ["Yes", "No"]
 
@@ -93,7 +94,7 @@ def delete():
 
     question = [
         inquirer.List('confirmation',
-                      message=f"{bcolors.FAIL}WARNING: This will delete all the books in your list at {raw_json['path']}. {bcolors.ENDC} Are you sure you want to do this? (Yes/No)",
+                      message=f"{bcolors.FAIL} WARNING: This will delete your booklist at {raw_json['path']}. {bcolors.ENDC} Are you sure you want to do this? (Yes/No)",
                       choices=OPTIONS,
                       ),
     ]
@@ -106,10 +107,8 @@ def delete():
         exit()
 
     if to_exterminate == "Yes":
-        raw_json["book_list"] = []
-        raw_json["tag_list"] = []
-        h.write_file(raw_json)
-        print("All books and tags have been deleted.")
+        os.remove("./path.txt")
+        print("Booklist deleted. Reinitialize with 'init'.")
     else:
         print("Action aborted.")
 

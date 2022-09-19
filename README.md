@@ -40,12 +40,14 @@ There are many features that make your life easier:
 * `add` adds a new book
 * `remove` gets rid of a book
 * `list` prints out all the books from greatest to least priority
-*  `change-status` modifies the status of a book
 * `skim` lists the attributes of a book
-* `prioritize` changes the priority of a book
-* `tag` adds the given tag to the given book
 * `untag` removes the target tag from the given book
 * `lookup` searches by title
 * `compile` searches by tag
 * `delete` clears the booklist
-
+* `reading` delivers the book you are reading now, defined as the book with the highest priority in the reading states.
+* `next` delivers the book you want to read next, defined as the book with the highest priority in the "to-read" state.
+* `change` Changes one of the book's attributes. Use "change --help" for more.
+* `transcribe` Add books from a CSV file in the format of "book title", "book author" to the book list.
+* `classify` Prints list of all tags.
+* `count` Prints list length.

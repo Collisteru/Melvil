@@ -13,7 +13,6 @@ import typer
 import inquirer
 from datetime import date
 
-
 TODAY = str(date.today())
 class bcolors:
     HEADER = '\033[95m'
@@ -31,7 +30,6 @@ app = typer.Typer()
 # Import Standard Modules
 
 import sys
-
 
 # Import submodules
 from booklist.booklist import *

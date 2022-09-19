@@ -1,7 +1,7 @@
 # A file containing functions related to search
 
 STATES = ["Unknown", "To Read", "Reading", "Read", "Reviewed"]
-# Import app from parent directory. This requires a bit of a python path hack.
+# Import appFile from parent directory. This requires a bit of a python path hack.
 import os
 import sys
 import inspect
@@ -17,7 +17,7 @@ from helper import helper as h
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil/")
 import typer
 
-# TODO: Possibly make this a scrollable list of the list ordered by reverse Levenshtein distance. Until then, keep the fraction of books listed high.
+# TODO: Possibly make this a scrollable list of the list ordered by reverse Levenshtein distance. Until then, keep the fraction of listed books high.
 @app.command()
 def lookup(input_string="", helper=False):
     """
@@ -84,6 +84,3 @@ def compile():
     print(f"The following books have the tag {target_tag}: ")
     for book in books_with_target_tag:
         print(book)
-
-
-

@@ -177,7 +177,7 @@ def list(helper: bool=False):
             for book in new_list:
                 data_table.append(["\x1B[3m" + book["title"] + "\x1B[0m", "Author: " + book["author"], "Priority: " + str(book["priority"]), "State: " + book["state"]])
             for row in data_table:
-                print("{: <60} \n{: <60} {: <60} {: <60}".format(*row))
+                print("{: <60} \n{: <60} {: <60} {: <60} \n".format(*row))
         else:
             print("No books yet. Try adding one with 'add'.")
     return new_list

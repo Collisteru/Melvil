@@ -6,6 +6,7 @@ import os
 import json
 import csv
 import os
+import pwd
 import sys
 import inspect
 
@@ -34,6 +35,10 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+def get_username():
+    return pwd.getpwuid(os.getuid())[0]
+
+user = get_username()
 @app.command()
 def init():
     """
@@ -55,7 +60,7 @@ def init():
 
     # Inquire as to the desired location
     questions = [
-        inquirer.Text('file_name', message="Enter a file name. Melvil will initialize use as your booklist a file with that name in the current directory. .", validate=file_validation)
+        inquirer.Text('file_name', message="Enter a file name. Melvil will use as your booklist a file with that name in the current directory. .", validate=file_validation)
     ]
     answers = h.safe_prompt(questions)
 
@@ -67,8 +72,8 @@ def init():
         location = os.getcwd() + "/" + answers["file_name"].replace(" ", "_")
 
     # Write filename in a reference PATH the program will use each time to find the file it wants.
-    with open("./path.txt", 'w+') as path:
-        print("Writing new path to path.txt")
+    with open(f"/home/{h.user}/.melvilPath", 'w+') as path:
+        print(f"Writing new path to /home/{h.user}/.melvilPath")
         path.write(location)
 
     # Initialize book dictionary
@@ -107,7 +112,7 @@ def delete():
         exit()
 
     if to_exterminate == "Yes":
-        os.remove("./path.txt")
+        os.remove(f"/home/{USER}/.melvilPath")
         print("Booklist deleted. Reinitialize with 'init'.")
     else:
         print("Action aborted.")
@@ -168,13 +173,14 @@ def list(helper: bool=False):
 
     data_table = []
     if not helper:
-        for book in new_list:
-            data_table.append(["\x1B[3m" + book["title"] + "\x1B[0m", "Author: " + book["author"], "Priority: " + str(book["priority"]), "State: " + book["state"]])
-        for row in data_table:
-            print("{: <50} {: <50} {: <50} {: <50}".format(*row))
-
-
-    return new_list # Can we use this as a helper for other commands
+        if len(new_list) != 0:
+            for book in new_list:
+                data_table.append(["\x1B[3m" + book["title"] + "\x1B[0m", "Author: " + book["author"], "Priority: " + str(book["priority"]), "State: " + book["state"]])
+            for row in data_table:
+                print("{: <60} \n{: <60} {: <60} {: <60}".format(*row))
+        else:
+            print("No books yet. Try adding one with 'add'.")
+    return new_list
 
 @app.command()
 def classify(helper: bool=False):

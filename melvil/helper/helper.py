@@ -6,11 +6,14 @@ import inquirer
 
 # Import appFile from parent directory. This requires a bit of a python path hack.
 import os
+import pwd
 import sys
 import inspect
 
+
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
+user = pwd.getpwuid(os.getuid())[0]
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
 
 
@@ -32,7 +35,7 @@ Read file
 """
 def read_file() -> dict:
     try:
-        with open("./path.txt", 'r') as path:
+        with open(f"/home/{user}/.melvilPath", 'r') as path:
             path = path.read()
     except:
         print("Can't read path file. Did you initialize a list with 'init'?")
@@ -42,7 +45,7 @@ def read_file() -> dict:
         with open(path, "r") as file:
             return json.load(file)
     except:
-        print("Invalid path in path file. Try modifying path.txt.")
+        print(f"Invalid path in path file. Try modifying /home/{h.user}/.melvilPath")
         sys.exit()
 
 """
@@ -51,13 +54,14 @@ Writes to melvil.json given a dictionary object
 def write_file(input: dict) -> None:
     json_string = json.dumps(input, indent=4)
     try:
-        with open("./path.txt", 'r') as path:
-            path = path.read()
-    except:
+        with open(f"/home/{user}/.melvilPath", 'r') as path:
+            path_line = path.read()
+    except Exception as e:
         print("Can't read path file. Did you initialize a list with 'init'?")
+        print(f"(Exception: {e})")
         quit()
 
-    with open(path, "w") as file: # Local variable 'path' referenced before assignment. What could this mean?
+    with open(path_line, "w") as file: # Local variable 'path' referenced before assignment. What could this mean?
         file.write(json_string)
 
 """

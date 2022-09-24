@@ -17,7 +17,6 @@ Install with `install.sh`
 
 ## Features:
 
-
 Melvil stores your books in a JSON file. Each book contains information about:
 
 * A title

@@ -14,7 +14,7 @@ import inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 user = pwd.getpwuid(os.getuid())[0]
-sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
+sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/Melvil_Project")
 
 
 
@@ -49,7 +49,7 @@ def read_file() -> dict:
         sys.exit()
 
 """
-Writes to melvil.json given a dictionary object
+Writes to Melvil_Project.json given a dictionary object
 """
 def write_file(input: dict) -> None:
     json_string = json.dumps(input, indent=4)

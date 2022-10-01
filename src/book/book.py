@@ -9,7 +9,7 @@ import inspect
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
+sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/Melvil_Project")
 
 from main import app
 
@@ -130,7 +130,7 @@ def add(
     # Convert the dictionary to JSON, load the JSON of the file holding the books, append this JSON to the other JSON,
     # and dump it all back into the file.
 
-    # Read melvil.json to get what's already there.
+    # Read Melvil_Project.json to get what's already there.
     old_data = h.read_file()
 
     # Add new_book to the booklist

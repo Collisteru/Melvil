@@ -17,7 +17,7 @@ from thefuzz import fuzz
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
+sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/Melvil_Project")
 
 import inquirer
 

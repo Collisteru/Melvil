@@ -18,12 +18,12 @@ from main import app
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/melvil")
+sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/Melvil_Project")
 
 from datetime import date
 
 TODAY = str(date.today())
-DEFAULT_FILE_NAME= "melvil.json"
+DEFAULT_FILE_NAME= "Melvil_Project.json"
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'

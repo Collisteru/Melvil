@@ -4,8 +4,7 @@
 
 ## The Command-line Book Management Tool
 
-Melvil aims to be the most user-friendly command line tool available for managing books. People who like convenience,
-speed, and owning their own data will like Melvil.
+Melvil is a command line tool for managing books and booklists.
 
 Install with `pip install booklist-melvil`
 

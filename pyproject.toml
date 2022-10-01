@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "melvil"
+name = "melvil_booklist"
 version = "1.0.0"
 description = ""
 authors = ["Sean <sean14520@gmail.com>"]

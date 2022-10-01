@@ -49,6 +49,6 @@ def callback():
     """
     pass
 
-# App is only invoked when we run main.py directly, but not when we import it.
+# App is only invoked when we run melvil.py directly, but not when we import it.
 if __name__ == "__main__":
       app()

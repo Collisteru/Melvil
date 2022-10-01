@@ -7,7 +7,7 @@
 Melvil aims to be the most user-friendly command line tool available for managing books. People who like convenience,
 speed, and owning their own data will like Melvil.
 
-Install with `install.sh`
+Install with `pip install booklist-melvil`
 
 ### Dependencies:
 

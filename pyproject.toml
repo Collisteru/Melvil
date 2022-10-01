@@ -1,10 +1,10 @@
 [tool.poetry]
 name = "melvil_booklist"
-version = "1.0.3"
-description = ""
+version = "1.0.4"
+description="A command line book management tool."
 authors = ["Sean <sean14520@gmail.com>"]
 readme="README.md"
-description="A command line book management tool."
+
 
 [tool.poetry.scripts]
 melvil = "melvil.main:app"

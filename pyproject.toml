@@ -4,6 +4,7 @@ version = "1.0.3"
 description = ""
 authors = ["Sean <sean14520@gmail.com>"]
 readme="README.md"
+description="A command line book management tool."
 
 [tool.poetry.scripts]
 melvil = "melvil.main:app"

@@ -12,7 +12,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/Melvil_Project")
 
 from melvil_booklist import app, FUZZY_RATIO_THRESHOLD
-from helper import helper as h
+import helper as h
 
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/Melvil_Project/")
 import typer

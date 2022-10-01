@@ -27,17 +27,13 @@ class bcolors:
 app = typer.Typer()
 
 # Import Standard Modules
-from book.book import *
-from booklist.booklist import *
-from reading import *
-from search import *
-import helper.helper as h
-
-
-
-
 
 # Import submodules
+from book import *
+from booklist import *
+from reading import *
+from search import *
+import helper as h
 
 # Testing that we have indeed imported the required packages...
 def EmptyTitleException(Exception):

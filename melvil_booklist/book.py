@@ -1,6 +1,6 @@
 # A file for commands that affect a single book.
-from helper import helper as h
-from search import search as s
+import helper as h
+import search as s
 
 # Import appFile from parent directory. This requires a bit of a python path hack.
 import os

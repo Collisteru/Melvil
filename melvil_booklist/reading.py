@@ -7,7 +7,7 @@
 
 # Okay, here's what we're going to do:
 from melvil_booklist import app
-from helper import helper as h
+import helper as h
 import os
 import inspect
 import sys

@@ -10,17 +10,13 @@ import pwd
 import sys
 import inspect
 
-
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 user = pwd.getpwuid(os.getuid())[0]
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/Melvil_Project")
 
-
-
 # TODO: It may actually be possible to solve the interruption problem by adding a custom verify function that checks if the input contains a newline character or an interrupt character or another
 # special character and nothing else.
-
 
 # SEARCH_FRACTION Defines a "reasonable" number of search results for each query as a fraction of the
 # total number of books in the catalog.

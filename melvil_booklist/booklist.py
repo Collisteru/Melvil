@@ -10,8 +10,7 @@ import pwd
 import sys
 import inspect
 
-
-from helper import helper as h
+import helper as h
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)

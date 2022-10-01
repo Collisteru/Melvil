@@ -6,7 +6,7 @@
 # Once again though, that would be hard to implement. Keep it simple, we're not geniuses, here.
 
 # Okay, here's what we're going to do:
-from melvil import app
+from melvil_booklist import app
 from helper import helper as h
 import os
 import inspect

@@ -1,7 +1,7 @@
 VERSION = "1.0.0"
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 STATES = ["Unknown", "To Read", "Reading", "Read", "Reviewed"]
-DEFAULT_FILE_NAME = "Melvil_Project/Melvil_Project.json"
+DEFAULT_FILE_NAME = "melvil/melvil.json"
 FUZZY_RATIO_THRESHOLD = 75 # We shouldn't count fuzzy ratios that are higher than this.
 
 # Root file for major dependencies and data.

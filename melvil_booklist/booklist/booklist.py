@@ -1,6 +1,6 @@
 # This file focuses on commands that affect the entire booklist.
 
-from melvil import app
+from melvil_booklist import app
 import inquirer
 import os
 import json
@@ -12,9 +12,6 @@ import inspect
 
 
 from helper import helper as h
-
-from melvil import app
-
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)

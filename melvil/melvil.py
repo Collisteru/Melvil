@@ -10,7 +10,6 @@ FUZZY_RATIO_THRESHOLD = 75 # We shouldn't count fuzzy ratios that are higher tha
 # Note that this includes all the information Melvil needs to find the proper file to edit:
 
 import typer
-import inquirer
 from datetime import date
 
 TODAY = str(date.today())
@@ -28,15 +27,17 @@ class bcolors:
 app = typer.Typer()
 
 # Import Standard Modules
+from book.book import *
+from booklist.booklist import *
+from reading import *
+from search import *
+import helper.helper as h
 
-import sys
+
+
+
 
 # Import submodules
-from booklist.booklist import *
-from book.book import *
-from search.search import *
-from helper.helper import *
-from reading.reading import *
 
 # Testing that we have indeed imported the required packages...
 def EmptyTitleException(Exception):

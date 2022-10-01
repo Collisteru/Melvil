@@ -11,7 +11,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/Melvil_Project")
 
-from main import app, FUZZY_RATIO_THRESHOLD
+from melvil import app, FUZZY_RATIO_THRESHOLD
 from helper import helper as h
 
 sys.path.insert(0, "/home/sean/Documents/Programs/Melvil/Melvil_Project/")

@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: booklist-melvil
+Version: 1.0.1
+Summary: The command line book management tool.
+Home-page: https://pypi.org/project/melvil-booklist/
+Author: Collisteru
+Author-email: collisteru@gmail.com
+License-File: LICENSE.txt
